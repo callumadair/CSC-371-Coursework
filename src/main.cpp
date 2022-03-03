@@ -2,8 +2,6 @@
 // CSC371 Advanced Object Oriented Programming (2021/22)
 // Department of Computer Science, Swansea University
 //
-// Author: <STUDENT NUMBER>
-//
 // Canvas: https://canvas.swansea.ac.uk/courses/24793
 // -----------------------------------------------------
 // This file will run the main application. You should

@@ -175,7 +175,7 @@ SCENARIO("Entries can be added to and deleted from an Item", "[item]") {
 
               THEN("the Item will not change") {
 
-                REQUIRE_FALSE(iObj1.deleteEntry("blah"));
+                REQUIRE_THROWS_AS(iObj1.getEntry("blah"), std::out_of_range);
                 REQUIRE(iObj1.getEntry(key) == value);
                 REQUIRE(iObj1.size() == 1);
 
@@ -188,7 +188,6 @@ SCENARIO("Entries can be added to and deleted from an Item", "[item]") {
               THEN("the Item will be empty") {
 
                 REQUIRE(iObj1.deleteEntry(key));
-                REQUIRE_THROWS_AS(iObj1.getEntry(key), std::out_of_range);
                 REQUIRE(iObj1.size() == 0);
 
               } // THEN

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 BIN_DIR="bin"
 SRC_DIR="src"
 TESTS_DIR="tests"
