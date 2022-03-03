@@ -69,4 +69,4 @@ bin/*
 
 # CLion
 /cmake-build-debug/
-/.idea
+/.idea/
