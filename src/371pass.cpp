@@ -120,7 +120,7 @@ cxxopts::Options App::cxxoptsSetup() {
 // TODO Rewrite this function so that it works. This function should
 //  case-insensitively check the action argument retrieved from cxxopts and
 //  convert this to a value from the ACTION enum. If an invalid value is given
-//  in a string, throw an std::invalid_argument exception.
+//  in a string, throw an std::invalid_argument exception. - DONE!
 //
 // Example:
 //  auto options = App::cxxoptsSetup();
@@ -139,7 +139,7 @@ App::Action App::parseActionArgument(cxxopts::ParseResult &args) {
     } else if (input == "DELETE") {
         return Action::DELETE;
     }
-    throw std::invalid_argument("Value given is not a valid action input");
+    throw std::invalid_argument("invalid");
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
