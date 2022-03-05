@@ -35,44 +35,44 @@
 // Example:
 //  int main(int argc, char *argv[]) { return App::run(argc, argv); }
 int App::run(int argc, char *argv[]) {
-  auto options = App::cxxoptsSetup();
-  auto args = options.parse(argc, argv);
+    auto options = App::cxxoptsSetup();
+    auto args = options.parse(argc, argv);
 
-  // Print the help usage if requested
-  if (args.count("help")) {
-    std::cout << options.help() << '\n';
+    // Print the help usage if requested
+    if (args.count("help")) {
+        std::cout << options.help() << '\n';
+        return 0;
+    }
+
+    // Open the database and construct the Wallet
+    const std::string db = args["db"].as<std::string>();
+    Wallet wObj{};
+    // Only uncomment this once you have implemented the load function!
+    // wObj.load(db);
+
+    const Action a = parseActionArgument(args);
+    switch (a) {
+        case Action::CREATE:
+            throw std::runtime_error("create not implemented");
+            break;
+
+        case Action::READ:
+            throw std::runtime_error("read not implemented");
+            break;
+
+        case Action::UPDATE:
+            throw std::runtime_error("update not implemented");
+            break;
+
+        case Action::DELETE:
+            throw std::runtime_error("delete not implemented");
+            break;
+
+        default:
+            throw std::runtime_error("Unknown action not implemented");
+    }
+
     return 0;
-  }
-
-  // Open the database and construct the Wallet
-  const std::string db = args["db"].as<std::string>();
-  Wallet wObj{};
-  // Only uncomment this once you have implemented the load function!
-  // wObj.load(db);
-
-  const Action a = parseActionArgument(args);
-  switch (a) {
-  case Action::CREATE:
-    throw std::runtime_error("create not implemented");
-    break;
-
-  case Action::READ:
-    throw std::runtime_error("read not implemented");
-    break;
-
-  case Action::UPDATE:
-    throw std::runtime_error("update not implemented");
-    break;
-
-  case Action::DELETE:
-    throw std::runtime_error("delete not implemented");
-    break;
-
-  default:
-    throw std::runtime_error("Unknown action not implemented");
-  }
-
-  return 0;
 }
 
 // Create a cxxopts instance. You do not need to modify this function.
@@ -81,40 +81,40 @@ int App::run(int argc, char *argv[]) {
 //  auto options = App::cxxoptsSetup();
 //  auto args = options.parse(argc, argv);
 cxxopts::Options App::cxxoptsSetup() {
-  cxxopts::Options cxxopts("371pass", "Student ID: " + STUDENT_NUMBER + "\n");
+    cxxopts::Options cxxopts("371pass", "Student ID: " + STUDENT_NUMBER + "\n");
 
-  cxxopts.add_options()(
-      "db", "Filename of the 371pass database",
-      cxxopts::value<std::string>()->default_value("database.json"))(
+    cxxopts.add_options()(
+            "db", "Filename of the 371pass database",
+            cxxopts::value<std::string>()->default_value("database.json"))(
 
-      "action", "Action to take, can be: 'create', 'read', 'update', 'delete'.",
-      cxxopts::value<std::string>())(
+            "action", "Action to take, can be: 'create', 'read', 'update', 'delete'.",
+            cxxopts::value<std::string>())(
 
-      "category",
-      "Apply action to a category (e.g., if you want to add a category, set the"
-      " action argument to 'add' and the category argument to your chosen"
-      " category identifier).",
-      cxxopts::value<std::string>())(
+            "category",
+            "Apply action to a category (e.g., if you want to add a category, set the"
+            " action argument to 'add' and the category argument to your chosen"
+            " category identifier).",
+            cxxopts::value<std::string>())(
 
-      "item",
-      "Apply action to an item (e.g., if you want to add an item, set the "
-      "action argument to 'add', the category argument to your chosen category "
-      "identifier and the item argument to the item identifier).",
-      cxxopts::value<std::string>())(
+            "item",
+            "Apply action to an item (e.g., if you want to add an item, set the "
+            "action argument to 'add', the category argument to your chosen category "
+            "identifier and the item argument to the item identifier).",
+            cxxopts::value<std::string>())(
 
-      "entry",
-      "Apply action to an entry (e.g., if you want to add an entry, set the "
-      "action argument to 'add', the category argument to your chosen category "
-      "identifier, the item argument to your chosen item identifier, and the "
-      "entry argument to the string 'key,value'). If there is no comma, an "
-      "empty entry is inserted. If you are simply retrieving an entry, set the "
-      "entry argument to the 'key'. If you are updating an entry key, use a : "
-      "e.g., oldkey:newkey,newvalue.",
-      cxxopts::value<std::string>())(
+            "entry",
+            "Apply action to an entry (e.g., if you want to add an entry, set the "
+            "action argument to 'add', the category argument to your chosen category "
+            "identifier, the item argument to your chosen item identifier, and the "
+            "entry argument to the string 'key,value'). If there is no comma, an "
+            "empty entry is inserted. If you are simply retrieving an entry, set the "
+            "entry argument to the 'key'. If you are updating an entry key, use a : "
+            "e.g., oldkey:newkey,newvalue.",
+            cxxopts::value<std::string>())(
 
-      "h,help", "Print usage.");
+            "h,help", "Print usage.");
 
-  return cxxopts;
+    return cxxopts;
 }
 
 // TODO Rewrite this function so that it works. This function should
@@ -127,8 +127,19 @@ cxxopts::Options App::cxxoptsSetup() {
 //  auto args = options.parse(argc, argv);
 //  App::Action action = parseActionArgument(args);
 App::Action App::parseActionArgument(cxxopts::ParseResult &args) {
-  std::string input = args["action"].as<std::string>();
-  return Action::READ;
+    std::string input = args["action"].as<std::string>();
+    std::transform(input.begin(), input.end(), input.begin(), ::toupper);
+
+    if (input == "CREATE") {
+        return Action::CREATE;
+    } else if (input == "READ") {
+        return Action::CREATE;
+    } else if (input == "UPDATE") {
+        return Action::UPDATE;
+    } else if (input == "DELETE") {
+        return Action::DELETE;
+    }
+    throw std::invalid_argument("Value given is not a valid action input");
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
@@ -142,10 +153,10 @@ App::Action App::parseActionArgument(cxxopts::ParseResult &args) {
 // Example:
 //  Wallet wObj{};
 //  std::cout << getJSON(wObj);
-std::string App::getJSON(Wallet &wObj) { 
-  return "{}";
-  // Only uncomment this once you have implemented the functions used!
-  // return wObj.str();
+std::string App::getJSON(Wallet &wObj) {
+    return "{}";
+    // Only uncomment this once you have implemented the functions used!
+    // return wObj.str();
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
@@ -161,10 +172,10 @@ std::string App::getJSON(Wallet &wObj) {
 //  std::string c = "category argument value";
 //  std::cout << getJSON(wObj, c);
 std::string App::getJSON(Wallet &wObj, const std::string &c) {
-  return "{}";
-  // Only uncomment this once you have implemented the functions used!
-  // auto cObj = wObj.getCategory(c);
-  // return cObj.str();
+    return "{}";
+    // Only uncomment this once you have implemented the functions used!
+    // auto cObj = wObj.getCategory(c);
+    // return cObj.str();
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
@@ -182,11 +193,11 @@ std::string App::getJSON(Wallet &wObj, const std::string &c) {
 //  std::cout << getJSON(wObj, c, i);
 std::string App::getJSON(Wallet &wObj, const std::string &c,
                          const std::string &i) {
-  return "{}";
-  // Only uncomment this once you have implemented the functions used!
-  // auto cObj = wObj.getCategory(c);
-  // const auto iObj = cObj.getItem(i);
-  // return iObj.str();
+    return "{}";
+    // Only uncomment this once you have implemented the functions used!
+    // auto cObj = wObj.getCategory(c);
+    // const auto iObj = cObj.getItem(i);
+    // return iObj.str();
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
@@ -205,9 +216,9 @@ std::string App::getJSON(Wallet &wObj, const std::string &c,
 //  std::cout << getJSON(wObj, c, i, e);
 std::string App::getJSON(Wallet &wObj, const std::string &c,
                          const std::string &i, const std::string &e) {
-  return "{}";
-  // Only uncomment this once you have implemented the functions used!
-  // auto cObj = wObj.getCategory(c);
-  // auto iObj = cObj.getItem(i);
-  // return iObj.getEntry(e);
+    return "{}";
+    // Only uncomment this once you have implemented the functions used!
+    // auto cObj = wObj.getCategory(c);
+    // auto iObj = cObj.getItem(i);
+    // return iObj.getEntry(e);
 }
