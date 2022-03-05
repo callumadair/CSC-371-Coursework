@@ -20,8 +20,8 @@
 
 namespace App {
 
-// TODO: Enter your student number here!
-const std::string STUDENT_NUMBER = "851784";
+// TODO: Enter your student number here! - DONE!
+    const std::string STUDENT_NUMBER = "851784";
 
 // Enums (short for enumerations) are similar to their Java implementation.
 // It is a user-defined type, used to assign names to internal constants
@@ -40,19 +40,24 @@ const std::string STUDENT_NUMBER = "851784";
 //
 // This enum specifies the four different values we support in the action
 // program argument.
-enum Action { CREATE, READ, UPDATE, DELETE };
+    enum Action {
+        CREATE, READ, UPDATE, DELETE
+    };
 
-int run(int argc, char *argv[]);
+    int run(int argc, char *argv[]);
 
-cxxopts::Options cxxoptsSetup();
+    cxxopts::Options cxxoptsSetup();
 
-App::Action parseActionArgument(cxxopts::ParseResult &args);
+    App::Action parseActionArgument(cxxopts::ParseResult &args);
 
-std::string getJSON(Wallet &w);
-std::string getJSON(Wallet &w, const std::string &c);
-std::string getJSON(Wallet &w, const std::string &c, const std::string &i);
-std::string getJSON(Wallet &wObj, const std::string &c, const std::string &i,
-                    const std::string &e);
+    std::string getJSON(Wallet &w);
+
+    std::string getJSON(Wallet &w, const std::string &c);
+
+    std::string getJSON(Wallet &w, const std::string &c, const std::string &i);
+
+    std::string getJSON(Wallet &wObj, const std::string &c, const std::string &i,
+                        const std::string &e);
 
 } // namespace App
 
