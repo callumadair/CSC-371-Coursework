@@ -30,13 +30,13 @@ public:
 
     void setIdent(std::string identifier);
 
-    Item &newItem(const std::string &item_identifier);
+    Item &newItem(const std::string item_identifier);
 
-    bool addItem(const Item &item);
+    bool addItem(Item item);
 
-    Item &getItem(const std::string &item_identifier);
+    Item &getItem(const std::string item_identifier);
 
-    bool deleteItem(const std::string &item_identifier);
+    bool deleteItem(const std::string item_identifier);
 
     friend bool operator==(const Category &lhs, const Category &rhs);
 
