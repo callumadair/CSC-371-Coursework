@@ -132,14 +132,17 @@ App::Action App::parseActionArgument(cxxopts::ParseResult &args) {
 
     if (input == "CREATE") {
         return Action::CREATE;
-    } else if (input == "READ") {
-        return Action::CREATE;
-    } else if (input == "UPDATE") {
+    }
+    if (input == "READ") {
+        return Action::READ;
+    }
+    if (input == "UPDATE") {
         return Action::UPDATE;
-    } else if (input == "DELETE") {
+    }
+    if (input == "DELETE") {
         return Action::DELETE;
     }
-    throw std::invalid_argument("invalid");
+    throw std::invalid_argument("action");
 }
 
 // TODO Write a function, getJSON, that returns a std::string containing the
