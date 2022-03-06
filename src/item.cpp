@@ -74,7 +74,7 @@ bool Item::addEntry(const std::string key, const std::string value) {
 std::string Item::getEntry(const std::string key) {
     auto search = entries.find(key);
     if (search != entries.end()) {
-        return search->first;
+        return search->second;
     } else {
         throw std::out_of_range("No such key found.");
     }
@@ -129,6 +129,7 @@ std::string Item::str() {
         if (std::next(it) != entries.end()) sstr << ",";
         sstr << "\n";
     }
+    sstr << "}";
     return sstr.str();
 }
 
