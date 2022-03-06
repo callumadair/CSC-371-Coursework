@@ -63,6 +63,10 @@ bool Item::addEntry(const std::string key, const std::string value) {
     }
 }
 
+void Item::mergeEntries(Item &other) {
+    entries.insert(other.entries.begin(), other.entries.end());
+}
+
 // TODO Write a function, getEntry, that takes one parameter, an entry
 //  key and returns it's value. If no entry exists, throw an appropriate
 //  exception.

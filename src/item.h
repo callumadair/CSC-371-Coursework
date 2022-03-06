@@ -35,6 +35,8 @@ public:
 
     bool addEntry(std::string key, std::string value);
 
+    void mergeEntries(Item& other);
+
     std::string getEntry(std::string key);
 
     bool deleteEntry(std::string key);
