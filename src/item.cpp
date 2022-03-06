@@ -69,7 +69,7 @@ void Item::mergeEntries(Item &other) {
 
 // TODO Write a function, getEntry, that takes one parameter, an entry
 //  key and returns it's value. If no entry exists, throw an appropriate
-//  exception.
+//  exception. - DONE!
 //
 // Example:
 //  Item iObj{"identIdent"};
@@ -118,7 +118,7 @@ bool operator==(Item &lhs, Item &rhs) {
 }
 
 // TODO Write a function, str, that takes no parameters and returns a
-//  std::string of the JSON representation of the data in the Item.
+//  std::string of the JSON representation of the data in the Item. - DONE!
 //
 // See the coursework specification for how this JSON should look.
 //
