@@ -16,7 +16,32 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#include <string>
+#include <unordered_map>
+
 class Item {
+    std::string identifier;
+    std::unordered_map<std::string, std::string> entries;
+public:
+    Item(std::string identifier);
+
+    unsigned int size();
+
+    bool empty();
+
+    std::string getIdent();
+
+    void setIdent(std::string identifier);
+
+    bool addEntry(std::string key, std::string value);
+
+    std::string getEntry(std::string key);
+
+    bool deleteEntry(std::string key);
+
+    friend bool operator==(Item &lhs, Item &rhs);
+
+    std::string str();
 
 };
 

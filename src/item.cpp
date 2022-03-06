@@ -7,6 +7,7 @@
 // Canvas: https://canvas.swansea.ac.uk/courses/24793
 // -----------------------------------------------------
 
+#include <sstream>
 #include "item.h"
 
 // TODO Write a constructor that takes one parameter, a string identifier
@@ -14,27 +15,53 @@
 //
 // Example:
 //  Item iObj{"identIdent"};
+Item::Item(const std::string identifier) : identifier(identifier) {}
 
-// TODO Write a function, getIdent, that returns the identifier for the Item.
+unsigned int Item::size() {
+    return entries.size();
+}
+
+bool Item::empty() {
+    return entries.empty();
+}
+
+
+// TODO Write a function, getIdent, that returns the identifier for the Item. - DONE!
 //
 // Example:
 //  Item iObj{"identIdent"};
 //  auto ident = iObj.getIdent();
+std::string Item::getIdent() {
+    return identifier;
+}
 
 // TODO Write a function, setIdent, that takes one parameter, a string for a new
-//  Item identifier, and updates the member variable. It returns nothing.
+//  Item identifier, and updates the member variable. It returns nothing. - DONE!
 //
 // Example:
 //  Item iObj{"identIdent"};
 //  iObj.setIdent("identIdent2");
+void Item::setIdent(const std::string identifier) {
+    this->identifier = identifier;
+}
 
 // TODO Write a function, addEntry, that takes two parameters, an entry
 //  key and value and returns true if the entry was inserted into the
-//  container or false if the entry already existed and was replaced.
+//  container or false if the entry already existed and was replaced. - DONE!
 //
 // Example:
 //  Item iObj{"identIdent"};
 //  iObj.addEntry("key", "value");
+bool Item::addEntry(const std::string key, const std::string value) {
+    auto search = entries.find(key);
+    if (search != entries.end()) {
+        entries[key] = value;
+        return false;
+    } else {
+        entries.insert(std::make_pair(key, value));
+        return true;
+    }
+}
 
 // TODO Write a function, getEntry, that takes one parameter, an entry
 //  key and returns it's value. If no entry exists, throw an appropriate
@@ -44,19 +71,36 @@
 //  Item iObj{"identIdent"};
 //  iObj.addEntry("key", "value");
 //  auto value = iObj.getEntry("key");
+std::string Item::getEntry(const std::string key) {
+    auto search = entries.find(key);
+    if (search != entries.end()) {
+        return search->first;
+    } else {
+        throw std::out_of_range("No such key found.");
+    }
+}
 
 // TODO Write a function, deleteEntry, that takes one parameter, an entry
 //  key, deletes it from the container, and returns true if the Item was
-//  deleted. If no entry exists, throw an appropriate exception.
+//  deleted. If no entry exists, throw an appropriate exception. - DONE!
 //
 // Example:
 //  Item iObj{"identIdent"};
 //  iObj.addEntry("key", "value");
 //  iObj.deleteEntry("key");
+bool Item::deleteEntry(const std::string key) {
+    auto search = entries.find(key);
+    if (search != entries.end()) {
+        entries.erase(key);
+        return true;
+    }
+    throw std::out_of_range("No such key found.");
+}
+
 
 // TODO Write an == operator overload for the Item class, such that two
 //  Item objects are equal only if they have the same identifier and same
-//  entries.
+//  entries. - DONE!
 //
 // Example:
 //  Item iObj1{"identIdent"};
@@ -65,6 +109,9 @@
 //  if(iObj1 == iObj2) {
 //    ...
 //  }
+bool operator==(Item &lhs, Item &rhs) {
+    return lhs.identifier == rhs.identifier && lhs.entries == rhs.entries;
+}
 
 // TODO Write a function, str, that takes no parameters and returns a
 //  std::string of the JSON representation of the data in the Item.
@@ -74,3 +121,15 @@
 // Example:
 //  Item iObj{"itemIdent"};
 //  std::string s = iObj.str();
+std::string Item::str() {
+    std::stringstream sstr;
+    sstr << "{" << identifier << ": " << " {";
+    for (auto it = entries.begin(); it != entries.end(); it++) {
+        sstr << it->first << ":" << it->second;
+        if (std::next(it) != entries.end()) sstr << ",";
+        sstr << "\n";
+    }
+    return sstr.str();
+}
+
+
