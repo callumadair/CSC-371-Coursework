@@ -63,6 +63,11 @@ Item Category::newItem(const std::string item_identifier) {
         if (search == items.end()) {
             Item new_item(item_identifier);
             items.insert(std::make_pair(item_identifier, new_item));
+
+            if (items.find(item_identifier) == items.end()) {
+                throw std::runtime_error("Item was not inserted successfully.");
+            }
+
             Item &ref = new_item;
             return ref;
         } else {
@@ -84,6 +89,11 @@ bool Category::addItem(Item &item) {
     auto search = items.find(item.getIdent());
     if (search == items.end()) {
         items.insert(std::make_pair(item.getIdent(), item));
+
+        if (items.find(item.getIdent()) == items.end()) {
+            throw std::runtime_error("Item was not inserted successfully.");
+        }
+
         return true;
     } else {
         items.find(item.getIdent())->second.mergeEntries(item);
