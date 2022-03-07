@@ -15,40 +15,83 @@
 // Example:
 //  Wallet wObj{};
 
+Wallet::Wallet() {}
+
 // TODO Write a function, size, that takes no parameters and returns an unsigned
-//  int of the number of categories the Wallet contains.
+//  int of the number of categories the Wallet contains. - DONE!
 //
 // Example:
 //  Wallet wObj{};
 //  auto size = wObj.size();
 
+unsigned int Wallet::size() {
+    return categories.size();
+}
+
 // TODO Write a function, empty, that takes no parameters and returns true
-//  if the number of categories in the Wallet is zero, false otherwise.
+//  if the number of categories in the Wallet is zero, false otherwise. - DONE!
 //
 // Example:
 //  Wallet wwObj{};
 //  auto isEmpty = wObj.empty();
 
+bool Wallet::empty() {
+    return categories.empty();
+}
+
 // TODO Write a function, newCategory, that takes one parameter, a category
 //  identifier, and returns the Category object as a reference. If an object
 //  with the same identifier already exists, then the existing object should be
 //  returned. Throw a std::runtime_error if the Category object cannot be
-//  inserted into the container.
+//  inserted into the container. - DONE!
 //
 // Example:
 //  Wallet wObj{};
 //  wObj.newCategory("categoryIdent");
 
+Category Wallet::newCategory(std::string category_identifier) {
+    auto search = categories.find(category_identifier);
+    if (search == categories.end()) {
+        Category new_category(category_identifier);
+        categories.insert(std::make_pair(category_identifier, new_category));
+
+        if (categories.find(category_identifier) == categories.end()) {
+            throw std::runtime_error("Category was not inserted successfully.");
+        }
+
+        Category &ref = new_category;
+        return ref;
+    } else {
+        return categories.find(category_identifier)->second;
+    }
+}
+
 // TODO Write a function, addCategory, that takes one parameter, a Category
 //  object, and returns true if the object was successfully inserted. If an
 //  object with the same identifier already exists, then the contents should be
 //  merged and then return false. Throw a std::runtime_error if the Category
-//  object cannot be inserted into the container for whatever reason.
+//  object cannot be inserted into the container for whatever reason. - DONE!
 //
 // Example:
 //  Wallet wObj{};
 //  Category cObj{"categoryIdent"};
 //  wObj.addCategory(cObj);
+
+bool Wallet::addCategory(Category category) {
+    auto search = categories.find(category.getIdent());
+    if (search == categories.end()) {
+        categories.insert(std::make_pair(category.getIdent(), category));
+
+        if (categories.find(category.getIdent()) == categories.end()) {
+            throw std::runtime_error("Item was not inserted successfully.");
+        }
+
+        return true;
+    } else {
+        categories.find(category.getIdent())->second.mergeItems(category);
+        return false;
+    }
+}
 
 // TODO Write a function, getCategory, that takes one parameter, a Category
 //  identifier and returns the Category. If no Category exists, throw an
@@ -59,6 +102,16 @@
 //  wObj.newCategory("categoryIdent");
 //  auto cObj = wObj.getCategory("categoryIdent");
 
+Category Wallet::getCategory(std::string category_identifier) {
+    auto search = categories.find(category_identifier);
+    if (search != categories.end()) {
+        Category &ref = search->second;
+        return ref;
+    } else {
+        throw std::out_of_range("No such item found.");
+    }
+}
+
 // TODO Write a function, deleteEntry, that takes one parameter, a Category
 //  identifier, and deletes it from the container, and returns true if the
 //  Category was deleted. If no Category exists, throw an appropriate exception.
@@ -67,6 +120,15 @@
 //  Wallet wObj{};
 //  wObj.newCategory("categoryIdent");
 //  wObj.deleteCategory("categoryIdent");
+
+bool Wallet::deleteEntry(const std::string category_identifier) {
+    auto search = categories.find(category_identifier);
+    if (search != categories.end()) {
+        categories.erase(category_identifier);
+        return true;
+    }
+    throw std::out_of_range("No such item found.");
+}
 
 // TODO Write a function, load, that takes one parameter, a std::string,
 //  containing the filename for the database. Open the file, read the contents,
@@ -147,6 +209,9 @@
 //  if(wObj1 == wObj2) {
 //    ...
 //  }
+bool operator==(const Wallet &lhs, const Wallet &rhs) {
+    return lhs.categories == rhs.categories;
+}
 
 // TODO Write a function, str, that takes no parameters and returns a
 //  std::string of the JSON representation of the data in the Wallet.
@@ -157,3 +222,15 @@
 // Example:
 //  Wallet wObj{};
 //  std::string s = wObj.str();
+
+std::string Wallet::str() {
+    std::stringstream sstr;
+    sstr << "{";
+    for (auto it = categories.begin(); it != categories.end(); it++) {
+        sstr << it->first << ":" << it->second.str();
+        if (std::next(it) != categories.end()) sstr << ",";
+        sstr << "\n";
+    }
+    sstr << "}";
+    return sstr.str();
+}

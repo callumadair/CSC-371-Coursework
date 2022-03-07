@@ -32,7 +32,7 @@ public:
 
     Category getCategory(std::string category_identifier);
 
-    bool deleteCategory(std::string category_identifier);
+    bool deleteEntry(std::string category_identifier);
 
     bool load(std::string filename);
 
