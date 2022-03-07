@@ -33,7 +33,7 @@ public:
 
     Item newItem(const std::string item_identifier);
 
-    bool addItem(Item &item);
+    bool addItem(Item item);
 
     Item &getItem(const std::string item_identifier);
 

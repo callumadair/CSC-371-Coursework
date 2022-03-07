@@ -85,7 +85,7 @@ Item Category::newItem(const std::string item_identifier) {
 //  Item iObj{"itemIdent"};
 //  cObj.addItem(iObj);
 
-bool Category::addItem(Item &item) {
+bool Category::addItem(Item item) {
     auto search = items.find(item.getIdent());
     if (search == items.end()) {
         items.insert(std::make_pair(item.getIdent(), item));
