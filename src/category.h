@@ -15,6 +15,7 @@
 
 #include <string>
 #include "item.h"
+#include <sstream>
 
 class Category {
     std::string identifier;
@@ -42,5 +43,14 @@ public:
 
     std::string str();
 };
-
+namespace std {
+template<>
+struct hash<Category> {
+    size_t operator()(const Category &obj) const {
+        std::stringstream sstr;
+        sstr << obj.str();
+        return std::hash<std::string>{}(sstr.str());
+    }
+};
+}
 #endif // CATEGORY_H
