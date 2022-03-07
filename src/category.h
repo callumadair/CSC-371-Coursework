@@ -31,9 +31,9 @@ public:
 
     void setIdent(std::string identifier);
 
-    Item &newItem(const std::string item_identifier);
+    Item newItem(const std::string item_identifier);
 
-    bool addItem(Item item);
+    bool addItem(Item &item);
 
     Item &getItem(const std::string item_identifier);
 
@@ -44,13 +44,13 @@ public:
     std::string str();
 };
 namespace std {
-template<>
-struct hash<Category> {
-    size_t operator()(const Category &obj) const {
-        std::stringstream sstr;
-        sstr << obj.str();
-        return std::hash<std::string>{}(sstr.str());
-    }
-};
+    template<>
+    struct hash<Category> {
+        size_t operator()(Category &category) const {
+            std::stringstream sstr;
+            sstr << category.str();
+            return std::hash<std::string>{}(sstr.str());
+        }
+    };
 }
 #endif // CATEGORY_H

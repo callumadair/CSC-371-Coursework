@@ -58,11 +58,11 @@ void Category::setIdent(const std::string identifier) {
 //  Category cObj{"categoryIdent"};
 //  cObj.newItem("itemIdent");
 
-Item &Category::newItem(const std::string item_identifier) {
+Item Category::newItem(const std::string item_identifier) {
     auto search = items.find(item_identifier);
     if (search == items.end()) {
         Item new_item(item_identifier);
-        items[item_identifier] = new_item;
+        items.insert((std::pair<std::string, Item>(item_identifier, new_item)));
         Item &ref = new_item;
         return ref;
     } else {
@@ -81,13 +81,13 @@ Item &Category::newItem(const std::string item_identifier) {
 //  Item iObj{"itemIdent"};
 //  cObj.addItem(iObj);
 
-bool Category::addItem(Item item) {
+bool Category::addItem(Item &item) {
     auto search = items.find(item.getIdent());
     if (search == items.end()) {
-        items[item.getIdent()] = item;
+        items.insert(std::pair<std::string, Item>(item.getIdent(), item));
         return true;
     } else {
-        items[item.getIdent()].mergeEntries(item);
+        items.find(item.getIdent())->second.mergeEntries(item);
         return false;
     }
 }

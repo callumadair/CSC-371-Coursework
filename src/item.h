@@ -18,12 +18,13 @@
 
 #include <string>
 #include <unordered_map>
+#include <sstream>
 
 class Item {
     std::string identifier;
     std::unordered_map<std::string, std::string> entries;
 public:
-    Item(std::string identifier);
+    Item(const std::string identifier);
 
     unsigned int size();
 
@@ -35,16 +36,26 @@ public:
 
     bool addEntry(std::string key, std::string value);
 
-    void mergeEntries(Item& other);
+    void mergeEntries(Item &other);
 
     std::string getEntry(std::string key);
 
     bool deleteEntry(std::string key);
 
-    friend bool operator==(Item &lhs, Item &rhs);
+    friend bool operator==(const Item &lhs, const Item &rhs);
 
     std::string str();
 
 };
+namespace std {
+    template<>
+    struct hash<Item> {
+        size_t operator()(Item &item) const {
+            std::stringstream sstr;
+            sstr << item.str();
+            return std::hash<std::string>{}(sstr.str());
+        }
+    };
+}
 
 #endif // ITEM_H
