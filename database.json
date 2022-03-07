@@ -1,17 +1,17 @@
 {
-  "Websites" : {
-    "Google":  {
-      "url":  "https://www.google.com/",
+  "Websites": {
+    "Google": {
+      "url": "https://www.google.com/",
       "username": "example@outlook.com",
       "password": "pass1234"
     },
-    "Facebook":  {
-      "url":  "https://www.facebook.com/",
+    "Facebook": {
+      "url": "https://www.facebook.com/",
       "username": "example@outlook.com",
       "password": "pass1234fb"
     },
-    "Twitter" : {
-      "url":  "https://www.twitter.com/",
+    "Twitter": {
+      "url": "https://www.twitter.com/",
       "username": "example@outlook.com",
       "password": "r43rfsffdsfdsf"
     }
