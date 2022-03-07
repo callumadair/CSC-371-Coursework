@@ -13,8 +13,19 @@
 #ifndef CATEGORY_H
 #define CATEGORY_H
 
+#include <sstream>
+
 class Category {
 
 };
-
+namespace std {
+template<>
+struct hash<Category> {
+    size_t operator()(const Category &obj) const {
+        std::stringstream sstr;
+        sstr << obj.str();
+        return std::hash<std::string>{}(sstr.str());
+    }
+};
+}
 #endif // CATEGORY_H
