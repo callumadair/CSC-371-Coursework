@@ -101,6 +101,10 @@ bool Category::addItem(Item item) {
     }
 }
 
+void Category::mergeItems(Category other) {
+    items.insert(other.items.begin(), other.items.end());
+}
+
 // TODO Write a function, getItem, that takes one parameter, an Item
 //  identifier (a string) and returns the Item as a reference. If no Item
 //  exists, throw an appropriate exception. - DONE!

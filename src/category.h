@@ -35,6 +35,8 @@ public:
 
     bool addItem(Item item);
 
+    void mergeItems(Category other);
+
     Item &getItem(const std::string item_identifier);
 
     bool deleteItem(const std::string item_identifier);
@@ -42,6 +44,7 @@ public:
     friend bool operator==(const Category &lhs, const Category &rhs);
 
     std::string str();
+
 };
 namespace std {
     template<>
