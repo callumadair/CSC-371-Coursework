@@ -59,16 +59,15 @@ void Category::setIdent(const std::string identifier) {
 //  cObj.newItem("itemIdent");
 
 Item Category::newItem(const std::string item_identifier) {
-    auto search = items.find(item_identifier);
-    if (search == items.end()) {
-        Item new_item(item_identifier);
-        items.insert((std::pair<std::string, Item>(item_identifier, new_item)));
-        Item &ref = new_item;
-        return ref;
-    } else {
-        return items.find(item_identifier)->second;
-    }
-    throw std::runtime_error("Item could not be inserted into the container.");
+        auto search = items.find(item_identifier);
+        if (search == items.end()) {
+            Item new_item(item_identifier);
+            items.insert(std::make_pair(item_identifier, new_item));
+            Item &ref = new_item;
+            return ref;
+        } else {
+            return items.find(item_identifier)->second;
+        }
 }
 
 // TODO Write a function, addItem, that takes one parameter, an Item object,
@@ -84,7 +83,7 @@ Item Category::newItem(const std::string item_identifier) {
 bool Category::addItem(Item &item) {
     auto search = items.find(item.getIdent());
     if (search == items.end()) {
-        items.insert(std::pair<std::string, Item>(item.getIdent(), item));
+        items.insert(std::make_pair(item.getIdent(), item));
         return true;
     } else {
         items.find(item.getIdent())->second.mergeEntries(item);
