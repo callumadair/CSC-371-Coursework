@@ -190,6 +190,10 @@ bool Wallet::deleteEntry(const std::string category_identifier) {
 //  Wallet wObj{};
 //  wObj.load("database.json");
 
+bool Wallet::load(std::string filename) {
+    return false;
+}
+
 // TODO Write a function ,save, that takes one parameter, the path of the file
 //  to write the database to. The function should serialise the Wallet object
 //  as JSON.
@@ -199,6 +203,10 @@ bool Wallet::deleteEntry(const std::string category_identifier) {
 //  wObj.load("database.json");
 //  ...
 //  wObj.save("database.json");
+
+bool Wallet::save(std::string filename) {
+    return false;
+}
 
 // TODO Write an == operator overload for the Wallet class, such that two
 //  Wallet objects are equal only if they have the exact same data.
