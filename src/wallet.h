@@ -26,7 +26,7 @@ public:
 
     bool empty();
 
-    Category &newCategory(std::string category_identifier);
+    Category newCategory(std::string category_identifier);
 
     bool addCategory(Category category);
 
