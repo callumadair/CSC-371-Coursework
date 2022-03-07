@@ -112,7 +112,7 @@ Category Wallet::getCategory(std::string category_identifier) {
     }
 }
 
-// TODO Write a function, deleteEntry, that takes one parameter, a Category
+// TODO Write a function, deleteCategory, that takes one parameter, a Category
 //  identifier, and deletes it from the container, and returns true if the
 //  Category was deleted. If no Category exists, throw an appropriate exception.
 //
@@ -121,7 +121,7 @@ Category Wallet::getCategory(std::string category_identifier) {
 //  wObj.newCategory("categoryIdent");
 //  wObj.deleteCategory("categoryIdent");
 
-bool Wallet::deleteEntry(const std::string category_identifier) {
+bool Wallet::deleteCategory(const std::string category_identifier) {
     auto search = categories.find(category_identifier);
     if (search != categories.end()) {
         categories.erase(category_identifier);
