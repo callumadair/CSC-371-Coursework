@@ -55,7 +55,7 @@ void Item::setIdent(const std::string identifier) {
 bool Item::addEntry(const std::string key, const std::string value) {
     auto search = entries.find(key);
     if (search != entries.end()) {
-        entries[key] = value;
+        entries.insert(std::make_pair(key, value));
         return false;
     } else {
         entries.insert(std::make_pair(key, value));
@@ -113,7 +113,7 @@ bool Item::deleteEntry(const std::string key) {
 //  if(iObj1 == iObj2) {
 //    ...
 //  }
-bool operator==(Item &lhs, Item &rhs) {
+bool operator==(const Item &lhs,const Item &rhs) {
     return lhs.identifier == rhs.identifier && lhs.entries == rhs.entries;
 }
 
