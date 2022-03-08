@@ -1,3 +1,4 @@
+find_package(nlohmann_json 3.2.0 REQUIRED)
 cmake_minimum_required(VERSION 3.22)
 project(CSC_371_Coursework)
 
@@ -10,3 +11,4 @@ add_executable(CSC_371_Coursework
         src/item.cpp src/item.h
         src/lib_catch.hpp src/lib_catch_main.cpp src/lib_cxxopts.hpp src/lib_json.hpp
         src/wallet.cpp src/wallet.h)
+target_link_libraries(nlohmann_json::nlohmann_json)
