@@ -7,6 +7,8 @@
 // Canvas: https://canvas.swansea.ac.uk/courses/24793
 // -----------------------------------------------------
 
+#include <fstream>
+#include "lib_json.hpp"
 #include "wallet.h"
 
 // TODO Write a Wallet constructor that takes no parameters and constructs an
@@ -191,6 +193,15 @@ bool Wallet::deleteCategory(const std::string category_identifier) {
 //  wObj.load("database.json");
 
 bool Wallet::load(std::string filename) {
+    std::fstream json_file(filename);
+
+    std::string json_line;
+    std::stringstream sstr;
+    while (std::getline(json_file, json_line)) {
+        sstr << json_line;
+    }
+
+    auto json_str = nlohmann::json::parse(sstr.str());
     return false;
 }
 
