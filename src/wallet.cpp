@@ -244,7 +244,12 @@ bool Wallet::load(std::string filename) {
 //  wObj.save("database.json");
 
 bool Wallet::save(std::string filename) {
-    return false;
+    std::fstream json_file(filename);
+    if (json_file.is_open()) {
+        json_file << str();
+        return true;
+    }
+    throw std::runtime_error("Json file did not open successfully");
 }
 
 // TODO Write an == operator overload for the Wallet class, such that two

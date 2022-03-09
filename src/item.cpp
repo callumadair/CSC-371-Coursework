@@ -127,7 +127,7 @@ bool operator==(const Item &lhs, const Item &rhs) {
 //  std::string s = iObj.str();
 std::string Item::str() const {
     std::stringstream sstr;
-    sstr << "{\"" << identifier << "\":{";
+    sstr << "\"" << identifier << "\":{";
     for (auto it = entries.begin(); it != entries.end(); it++) {
         sstr << "\"" << it->first << "\":\"" << it->second << "\"";
         if (std::next(it) != entries.end()) sstr << ",";

@@ -170,9 +170,9 @@ bool operator==(const Category &lhs, const Category &rhs) {
 //  std::string s = cObj.str();
 std::string Category::str() const {
     std::stringstream sstr;
-    sstr << "{\"" << identifier << "\":{";
+    sstr << "\"" << identifier << "\":{";
     for (auto it = items.begin(); it != items.end(); it++) {
-        sstr << "\"" << it->first << "\":\"" << it->second.str() << "\"";
+        sstr << it->second.str() << "";
         if (std::next(it) != items.end()) sstr << ",";
     }
     sstr << "}";
