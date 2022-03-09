@@ -194,15 +194,18 @@ bool Wallet::deleteCategory(const std::string category_identifier) {
 
 bool Wallet::load(std::string filename) {
     std::fstream json_file(filename);
+    std::string json_str;
 
-    std::string json_line;
-    std::stringstream sstr;
-    while (std::getline(json_file, json_line)) {
-        sstr << json_line;
+    if (json_file.is_open()) {
+        json_file >> json_str;
+        auto json_obj = nlohmann::json::parse(json_str);
+        //categories = json_obj.get<std::unordered_map<std::string, Category>>();
+        for(auto it = json_obj.begin(); it != json_obj.end(); it++) {
+            std::string category_identifier = json_obj.get<std::string>();
+        }
+        return true;
     }
-
-    auto json_str = nlohmann::json::parse(sstr.str());
-    return false;
+    throw std::runtime_error("Json file did not open successfully");
 }
 
 // TODO Write a function ,save, that takes one parameter, the path of the file
@@ -242,7 +245,7 @@ bool operator==(const Wallet &lhs, const Wallet &rhs) {
 //  Wallet wObj{};
 //  std::string s = wObj.str();
 
-std::string Wallet::str() {
+std::string Wallet::str() const {
     std::stringstream sstr;
     sstr << "{";
     for (auto it = categories.begin(); it != categories.end(); it++) {
