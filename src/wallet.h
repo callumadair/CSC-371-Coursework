@@ -41,6 +41,10 @@ public:
     friend bool operator==(const Wallet &lhs, const Wallet &rhs);
 
     std::string str();
+
+    friend void to_json(nlohmann::json& j, const Wallet& wallet);
+
+    friend void from_json(const nlohmann::json& j, const Wallet& wallet);
 };
 
 #endif // WALLET_H
