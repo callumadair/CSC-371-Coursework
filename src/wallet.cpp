@@ -8,6 +8,7 @@
 // -----------------------------------------------------
 
 #include <fstream>
+#include <iostream>
 #include "lib_json.hpp"
 #include "wallet.h"
 
@@ -194,14 +195,38 @@ bool Wallet::deleteCategory(const std::string category_identifier) {
 
 bool Wallet::load(std::string filename) {
     std::fstream json_file(filename);
-    std::string json_str;
-
     if (json_file.is_open()) {
-        json_file >> json_str;
+        std::string json_str((std::istreambuf_iterator<char>(json_file)),
+                             (std::istreambuf_iterator<char>()));
+
         auto json_obj = nlohmann::json::parse(json_str);
-        //categories = json_obj.get<std::unordered_map<std::string, Category>>();
-        for(auto it = json_obj.begin(); it != json_obj.end(); it++) {
-            std::string category_identifier = json_obj.get<std::string>();
+
+        for (auto cat_it = json_obj.begin(); cat_it != json_obj.end(); cat_it++) {
+            Category new_category(cat_it.key());
+            auto category_items = cat_it.value();
+
+            for (auto item_it = category_items.begin(); item_it != category_items.end(); item_it++) {
+                Item new_item(item_it.key());
+                auto item_entries = item_it.value();
+
+                for (auto entry_it = item_entries.begin(); entry_it != item_entries.end(); entry_it++) {
+                    new_item.addEntry(entry_it.key(), entry_it.value());
+                }
+
+                try {
+                    Item existing_item = new_category.getItem(item_it.key());
+                    existing_item.mergeEntries(new_item);
+                } catch (std::out_of_range &e) {
+                    new_category.addItem(new_item);
+                }
+            }
+
+            try {
+                Category existing_category = getCategory(cat_it.key());
+                existing_category.mergeItems(new_category);
+            } catch (std::out_of_range &e) {
+                addCategory(new_category);
+            }
         }
         return true;
     }
@@ -249,9 +274,8 @@ std::string Wallet::str() const {
     std::stringstream sstr;
     sstr << "{";
     for (auto it = categories.begin(); it != categories.end(); it++) {
-        sstr << it->first << ":" << it->second.str();
+        sstr << it->second.str();
         if (std::next(it) != categories.end()) sstr << ",";
-        sstr << "\n";
     }
     sstr << "}";
     return sstr.str();
