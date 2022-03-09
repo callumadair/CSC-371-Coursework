@@ -113,7 +113,7 @@ bool Item::deleteEntry(const std::string key) {
 //  if(iObj1 == iObj2) {
 //    ...
 //  }
-bool operator==(const Item &lhs,const Item &rhs) {
+bool operator==(const Item &lhs, const Item &rhs) {
     return lhs.identifier == rhs.identifier && lhs.entries == rhs.entries;
 }
 
@@ -125,7 +125,7 @@ bool operator==(const Item &lhs,const Item &rhs) {
 // Example:
 //  Item iObj{"itemIdent"};
 //  std::string s = iObj.str();
-std::string Item::str() {
+std::string Item::str() const {
     std::stringstream sstr;
     sstr << "{" << identifier << ": " << " {";
     for (auto it = entries.begin(); it != entries.end(); it++) {
@@ -136,5 +136,3 @@ std::string Item::str() {
     sstr << "}";
     return sstr.str();
 }
-
-

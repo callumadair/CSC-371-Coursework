@@ -14,8 +14,8 @@
 #define CATEGORY_H
 
 #include <string>
-#include "item.h"
 #include <sstream>
+#include "item.h"
 
 class Category {
     std::string identifier;
@@ -43,7 +43,7 @@ public:
 
     friend bool operator==(const Category &lhs, const Category &rhs);
 
-    std::string str();
+    std::string str() const;
 
 };
 namespace std {

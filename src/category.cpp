@@ -168,7 +168,7 @@ bool operator==(const Category &lhs, const Category &rhs) {
 // Example:
 //  Category cObj{"categoryIdent"};
 //  std::string s = cObj.str();
-std::string Category::str() {
+std::string Category::str() const {
     std::stringstream sstr;
     sstr << "{" << identifier << ": " << " {";
     for (auto it = items.begin(); it != items.end(); it++) {

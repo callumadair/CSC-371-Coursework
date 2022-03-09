@@ -47,10 +47,6 @@ public:
 
     std::string str() const;
 
-    friend void to_json(nlohmann::json& j, const Item& item);
-
-    friend void from_json(const nlohmann::json& j, const Item& item);
-
 };
 namespace std {
     template<>
