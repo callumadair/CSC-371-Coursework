@@ -1,17 +1,1 @@
-{
-  "ident1": {
-    "ident1": {
-      "key1": "value1",
-      "key2": "value2"
-    },
-    "ident2": {
-      "key1": "value1"
-    }
-  },
-  "ident2": {
-    "ident1": {
-      "key1": "value1",
-      "key2": "value2"
-    }
-  }
-}
+{"ident1":{"ident1":{"key1":"value1","key2":"value2"},"ident2":{"key1":"value1"}},"ident2":{"ident1":{"key1":"value1","key2":"value2"}}}

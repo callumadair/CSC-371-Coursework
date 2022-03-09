@@ -26,14 +26,14 @@
 //  4. Save the updated Wallet object to the JSON file if there have been
 //     changes (calling save() on the Wallet object).
 //
-// Some commented out code has been provided. Using some of this will be
-// demonstrated in the coursework video on Canvas. Remember, this coursework is
-// meant to be challenging and testing your understanding of programming in C++.
-// Part of the challenge is figuring things out on your own. That is a major
-// part of software development.
-//
-// Example:
-//  int main(int argc, char *argv[]) { return App::run(argc, argv); }
+/* Some commented out code has been provided. Using some of this will be
+ demonstrated in the coursework video on Canvas. Remember, this coursework is
+ meant to be challenging and testing your understanding of programming in C++.
+ Part of the challenge is figuring things out on your own. That is a major
+ part of software development.
+
+ Example:
+  int main(int argc, char *argv[]) { return App::run(argc, argv); }*/
 int App::run(int argc, char *argv[]) {
     auto options = App::cxxoptsSetup();
     auto args = options.parse(argc, argv);
@@ -46,6 +46,9 @@ int App::run(int argc, char *argv[]) {
 
     // Open the database and construct the Wallet
     const std::string db = args["db"].as<std::string>();
+    std::string category = args["category"].as<std::string>();
+    std::string item = args["item"].as<std::string>();
+    std::string entry = args["entry"].as<std::string>();
     Wallet wObj{};
     wObj.load(db);
 
@@ -74,11 +77,11 @@ int App::run(int argc, char *argv[]) {
     return 0;
 }
 
-// Create a cxxopts instance. You do not need to modify this function.
-//
-// Example:
-//  auto options = App::cxxoptsSetup();
-//  auto args = options.parse(argc, argv);
+/* Create a cxxopts instance. You do not need to modify this function.
+
+ Example:
+  auto options = App::cxxoptsSetup();
+  auto args = options.parse(argc, argv);*/
 cxxopts::Options App::cxxoptsSetup() {
     cxxopts::Options cxxopts("371pass", "Student ID: " + STUDENT_NUMBER + "\n");
 
@@ -116,15 +119,10 @@ cxxopts::Options App::cxxoptsSetup() {
     return cxxopts;
 }
 
-// TODO Rewrite this function so that it works. This function should
-//  case-insensitively check the action argument retrieved from cxxopts and
-//  convert this to a value from the ACTION enum. If an invalid value is given
-//  in a string, throw an std::invalid_argument exception. - DONE!
-//
-// Example:
-//  auto options = App::cxxoptsSetup();
-//  auto args = options.parse(argc, argv);
-//  App::Action action = parseActionArgument(args);
+/* Example:
+  auto options = App::cxxoptsSetup();
+  auto args = options.parse(argc, argv);
+  App::Action action = parseActionArgument(args);*/
 App::Action App::parseActionArgument(cxxopts::ParseResult &args) {
     std::string input = args["action"].as<std::string>();
     std::transform(input.begin(), input.end(), input.begin(), ::toupper);
@@ -144,51 +142,43 @@ App::Action App::parseActionArgument(cxxopts::ParseResult &args) {
     throw std::invalid_argument("action");
 }
 
-// TODO Write a function, getJSON, that returns a std::string containing the
-//  JSON representation of a Wallet object.
-//
-// This function has been implemented for you, but you may wish to adjust it.
-// You will have to uncomment the code, which has been left commented to ensure
-// the coursework framework compiles (i.e., it calls functions that you must
-// implement, once you have implemented them you may uncomment this function).
-//
-// Example:
-//  Wallet wObj{};
-//  std::cout << getJSON(wObj);
+
+/* This function has been implemented for you, but you may wish to adjust it.
+ You will have to uncomment the code, which has been left commented to ensure
+ the coursework framework compiles (i.e., it calls functions that you must
+ implement, once you have implemented them you may uncomment this function).
+
+ Example:
+  Wallet wObj{};
+  std::cout << getJSON(wObj);*/
 std::string App::getJSON(Wallet &wObj) {
     return wObj.str();
 }
 
-// TODO Write a function, getJSON, that returns a std::string containing the
-//  JSON representation of a specific Category in a Wallet object.
-//
-// This function has been implemented for you, but you may wish to adjust it.
-// You will have to uncomment the code, which has been left commented to ensure
-// the coursework framework compiles (i.e., it calls functions that you must
-// implement, once you have implemented them you may uncomment this function).
-//
-// Example:
-//  Wallet wObj{};
-//  std::string c = "category argument value";
-//  std::cout << getJSON(wObj, c);
+/* This function has been implemented for you, but you may wish to adjust it.
+ You will have to uncomment the code, which has been left commented to ensure
+ the coursework framework compiles (i.e., it calls functions that you must
+ implement, once you have implemented them you may uncomment this function).
+
+ Example:
+  Wallet wObj{};
+  std::string c = "category argument value";
+  std::cout << getJSON(wObj, c);*/
 std::string App::getJSON(Wallet &wObj, const std::string &c) {
     auto cObj = wObj.getCategory(c);
     return cObj.str();
 }
 
-// TODO Write a function, getJSON, that returns a std::string containing the
-//  JSON representation of a specific Item in a Wallet object.
-//
-// This function has been implemented for you, but you may wish to adjust it.
-// You will have to uncomment the code, which has been left commented to ensure
-// the coursework framework compiles (i.e., it calls functions that you must
-// implement, once you have implemented them you may uncomment this function).
-//
-// Example:
-//  Wallet wObj{};
-//  std::string c = "category argument value";
-//  std::string i = "item argument value";
-//  std::cout << getJSON(wObj, c, i);
+/* This function has been implemented for you, but you may wish to adjust it.
+ You will have to uncomment the code, which has been left commented to ensure
+ the coursework framework compiles (i.e., it calls functions that you must
+ implement, once you have implemented them you may uncomment this function).
+
+ Example:
+  Wallet wObj{};
+  std::string c = "category argument value";
+  std::string i = "item argument value";
+  std::cout << getJSON(wObj, c, i);*/
 std::string App::getJSON(Wallet &wObj, const std::string &c,
                          const std::string &i) {
     auto cObj = wObj.getCategory(c);
@@ -196,20 +186,18 @@ std::string App::getJSON(Wallet &wObj, const std::string &c,
     return iObj.str();
 }
 
-// TODO Write a function, getJSON, that returns a std::string containing the
-//  JSON representation of a specific Entry in a Wallet object.
-//
-// This function has been implemented for you, but you may wish to adjust it.
-// You will have to uncomment the code, which has been left commented to ensure
-// the coursework framework compiles (i.e., it calls functions that you must
-// implement, once you have implemented them you may uncomment this function).
-//
-// Example:
-//  Wallet wObj{};
-//  std::string c = "category argument value";
-//  std::string i = "item argument value";
-//  std::string e = "entry argument value";
-//  std::cout << getJSON(wObj, c, i, e);
+
+/* This function has been implemented for you, but you may wish to adjust it.
+ You will have to uncomment the code, which has been left commented to ensure
+ the coursework framework compiles (i.e., it calls functions that you must
+ implement, once you have implemented them you may uncomment this function).
+
+ Example:
+  Wallet wObj{};
+  std::string c = "category argument value";
+  std::string i = "item argument value";
+  std::string e = "entry argument value";
+  std::cout << getJSON(wObj, c, i, e);*/
 std::string App::getJSON(Wallet &wObj, const std::string &c,
                          const std::string &i, const std::string &e) {
     // Only uncomment this once you have implemented the functions used!
