@@ -114,7 +114,7 @@ bool Category::deleteItem(const std::string item_identifier) {
     auto search = items.find(item_identifier);
     if (search != items.end()) {
         items.erase(item_identifier);
-        return true;
+        if(items.find(item_identifier) == items.end()) return true;
     }
     throw std::out_of_range("No such item found.");
 }

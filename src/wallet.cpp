@@ -101,7 +101,7 @@ bool Wallet::deleteCategory(const std::string category_identifier) {
     auto search = categories.find(category_identifier);
     if (search != categories.end()) {
         categories.erase(category_identifier);
-        return true;
+        if (categories.find(category_identifier) == categories.end()) return true;
     }
     throw std::out_of_range("No such item found.");
 }

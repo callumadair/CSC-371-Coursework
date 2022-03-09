@@ -76,9 +76,9 @@ bool Item::deleteEntry(const std::string key) {
     auto search = entries.find(key);
     if (search != entries.end()) {
         entries.erase(key);
-        return true;
+        if (entries.find(key) == entries.end()) return true;
     }
-    throw std::out_of_range("No such key found.");
+    throw std::out_of_range("Error deleting entry.");
 }
 
 
