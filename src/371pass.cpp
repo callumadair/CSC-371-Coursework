@@ -47,7 +47,6 @@ int App::run(int argc, char *argv[]) {
     // Open the database and construct the Wallet
     const std::string db = args["db"].as<std::string>();
     Wallet wObj{};
-    // Only uncomment this once you have implemented the load function!
     wObj.load(db);
 
     const Action a = parseActionArgument(args);

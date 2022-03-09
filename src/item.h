@@ -17,8 +17,6 @@
 #define ITEM_H
 
 #include <string>
-#include <unordered_map>
-#include <sstream>
 #include "lib_json.hpp"
 
 class Item {
@@ -48,15 +46,5 @@ public:
     std::string str() const;
 
 };
-namespace std {
-    template<>
-    struct hash<Item> {
-        size_t operator()(Item &item) const {
-            std::stringstream sstr;
-            sstr << item.str();
-            return std::hash<std::string>{}(sstr.str());
-        }
-    };
-}
 
 #endif // ITEM_H

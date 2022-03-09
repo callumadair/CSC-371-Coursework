@@ -14,7 +14,6 @@
 #ifndef WALLET_H
 #define WALLET_H
 
-#include <unordered_map>
 #include "category.h"
 
 class Wallet {

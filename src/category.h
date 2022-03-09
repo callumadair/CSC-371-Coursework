@@ -13,8 +13,6 @@
 #ifndef CATEGORY_H
 #define CATEGORY_H
 
-#include <string>
-#include <sstream>
 #include "item.h"
 
 class Category {
@@ -46,14 +44,4 @@ public:
     std::string str() const;
 
 };
-namespace std {
-    template<>
-    struct hash<Category> {
-        size_t operator()(Category &category) const {
-            std::stringstream sstr;
-            sstr << category.str();
-            return std::hash<std::string>{}(sstr.str());
-        }
-    };
-}
 #endif // CATEGORY_H
