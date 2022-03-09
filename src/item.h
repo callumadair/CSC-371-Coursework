@@ -23,7 +23,7 @@
 
 class Item {
     std::string identifier;
-    std::unordered_map<std::string, std::string> entries;
+    std::map<std::string, std::string> entries;
 public:
     Item(const std::string identifier);
 

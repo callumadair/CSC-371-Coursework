@@ -18,7 +18,7 @@
 #include "category.h"
 
 class Wallet {
-    std::unordered_map<std::string, Category> categories;
+    std::map<std::string, Category> categories;
 public:
     Wallet();
 

@@ -19,7 +19,7 @@
 
 class Category {
     std::string identifier;
-    std::unordered_map<std::string, Item> items;
+    std::map<std::string, Item> items;
 public:
     Category(const std::string identifier);
 
