@@ -37,6 +37,7 @@
 int App::run(int argc, char *argv[]) {
     auto options = App::cxxoptsSetup();
     auto args = options.parse(argc, argv);
+    args.arguments().size();
 
     // Print the help usage if requested
     if (args.count("help")) {
@@ -46,16 +47,38 @@ int App::run(int argc, char *argv[]) {
 
     // Open the database and construct the Wallet
     const std::string db = args["db"].as<std::string>();
-    std::string category = args["category"].as<std::string>();
-    std::string item = args["item"].as<std::string>();
-    std::string entry = args["entry"].as<std::string>();
+    std::string category_identifier = args["category"].as<std::string>();
+    std::string item_identifier = args["item"].as<std::string>();
+
+    std::string entry_pair = args["entry"].as<std::string>();
+    std::string entry_delimiter = ",";
+    std::string entry_identifier = entry_pair.substr(0, entry_pair.find(entry_delimiter));
+    std::string entry_value = entry_pair.substr(entry_pair.find(entry_delimiter) + 1, entry_pair.length());
+
     Wallet wObj{};
     wObj.load(db);
 
+    int num_args = (argc - 1) / 2;
     const Action a = parseActionArgument(args);
     switch (a) {
         case Action::CREATE:
-            throw std::runtime_error("create not implemented");
+            switch (num_args) {
+                case 3:
+                    wObj.newCategory(category_identifier);
+                    break;
+                case 4:
+                    wObj.newCategory(category_identifier);
+                    wObj.getCategory(category_identifier).newItem(item_identifier);
+                    break;
+                case 5:
+                    wObj.newCategory(category_identifier);
+                    wObj.getCategory(category_identifier).newItem(item_identifier);
+                    wObj.getCategory(category_identifier).getItem(item_identifier).addEntry(entry_identifier,
+                                                                                            entry_value);
+                    break;
+                default:
+                    throw std::invalid_argument("Invalid input arguments");
+            }
             break;
 
         case Action::READ:
