@@ -19,6 +19,7 @@
 #include <string>
 #include <unordered_map>
 #include <sstream>
+#include "lib_json.hpp"
 
 class Item {
     std::string identifier;
@@ -44,7 +45,11 @@ public:
 
     friend bool operator==(const Item &lhs, const Item &rhs);
 
-    std::string str();
+    std::string str() const;
+
+    friend void to_json(nlohmann::json& j, const Item& item);
+
+    friend void from_json(const nlohmann::json& j, const Item& item);
 
 };
 namespace std {
