@@ -50,11 +50,6 @@ int App::run(int argc, char *argv[]) {
     Wallet wObj{};
     wObj.load(db);
 
-    std::string category_identifier = args["category"].as<std::string>();
-    std::string item_identifier = args["item"].as<std::string>();
-
-
-    int num_args = (argc - 1) / 2;
     const Action a = parseActionArgument(args);
     switch (a) {
         case Action::CREATE:
