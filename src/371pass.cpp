@@ -53,67 +53,60 @@ int App::run(int argc, char *argv[]) {
     std::string category_identifier = args["category"].as<std::string>();
     std::string item_identifier = args["item"].as<std::string>();
 
-    std::string entry_pair = args["entry"].as<std::string>();
-    std::string entry_delimiter = ",";
-    std::string entry_identifier = entry_pair.substr(0, entry_pair.find(entry_delimiter));
-    std::string entry_value = entry_pair.substr(entry_pair.find(entry_delimiter) + 1, entry_pair.length());
 
     int num_args = (argc - 1) / 2;
     const Action a = parseActionArgument(args);
     switch (a) {
         case Action::CREATE:
-            switch (num_args) {
-                case 3:
-                    wObj.newCategory(category_identifier);
-                    break;
-                case 4:
-                    wObj.newCategory(category_identifier);
-                    wObj.getCategory(category_identifier).newItem(item_identifier);
-                    break;
-                case 5:
-                    wObj.newCategory(category_identifier);
-                    wObj.getCategory(category_identifier).newItem(item_identifier);
-                    wObj.getCategory(category_identifier).getItem(item_identifier).addEntry(entry_identifier,
-                                                                                            entry_value);
-                    break;
-                default:
-                    throw std::invalid_argument("Error: invalid action argument(s).");
+            if (args["category"].as<std::string>().length() > 0 && args["item"].as<std::string>().length() > 0
+                && args["entry"].as<std::string>().length() > 0) {
+                std::string entry_pair = args["entry"].as<std::string>();
+                std::string entry_delimiter = ",";
+                if (entry_pair.find(entry_delimiter)) {
+                    std::string entry_identifier = entry_pair.substr(0, entry_pair.find(entry_delimiter));
+                    std::string entry_value = entry_pair.substr(entry_pair.find(entry_delimiter) + 1,
+                                                                entry_pair.length());
+                }
+                break;
             }
-            break;
+
 
         case Action::READ:
-            switch (num_args) {
-                case 3:
-                    try {
-                        Category cat = wObj.getCategory(category_identifier);
-                        std::cout << cat.str();
-                        return 0;
-                    } catch (std::out_of_range &e) {
-                        std::cerr << e.what() << std::endl;
-                        return 1;
-                    }
-                case 4:
-                    try {
-                        Item item = wObj.getCategory(category_identifier).getItem(item_identifier);
-                        std::cout << item.str();
-                        return 0;
-                    } catch (std::out_of_range &e) {
-                        std::cerr << e.what() << std::endl;
-                        return 1;
-                    }
-                case 5:
-                    try {
-                        std::string entry_val = wObj.getCategory(category_identifier).getItem(item_identifier).getEntry(
-                                entry_identifier);
-                        std::cout << entry_val;
-                        return 0;
-                    } catch (std::out_of_range &e) {
-                        std::cerr << e.what() << std::endl;
-                    }
-                default:
-                    throw std::invalid_argument("Error: invalid action argument(s).");
+            if (args["category"].as<std::string>().length() > 0
+                && args["item"].as<std::string>().length() > 0
+                && args["entry"].as<std::string>().length() > 0) {
+                try {
+                    std::string value = wObj.getCategory(args["category"].as<std::string>())
+                            .getItem(args["item"].as<std::string>())
+                            .getEntry(args["entry"].as<std::string>());
+                    std::cout << value << std::endl;
+                    return 0;
+                } catch (std::out_of_range &e) {
+                    std::cerr << e.what() << std::endl;
+                    return 1;
+                }
+            } else if (args["category"].as<std::string>().length() > 0
+                       && args["item"].as<std::string>().length() > 0) {
+                try {
+                    Item item = wObj.getCategory(args["category"].as<std::string>())
+                            .getItem(args["item"].as<std::string>());
+                    std::cout << item.str();
+                    return 0;
+                } catch (std::out_of_range &e) {
+                    std::cerr << e.what() << std::endl;
+                    return 1;
+                }
+            } else if (args["category"].as<std::string>().length() > 0) {
+                try {
+                    Category cat = wObj.getCategory(args["category"].as<std::string>());
+                    std::cout << cat.str();
+                    return 0;
+                } catch (std::out_of_range &e) {
+                    std::cerr << e.what() << std::endl;
+                    return 1;
+                }
             }
-            break;
+
 
         case Action::UPDATE:
             throw std::runtime_error("update not implemented");
