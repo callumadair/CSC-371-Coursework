@@ -67,16 +67,24 @@ int App::run(int argc, char *argv[]) {
                 break;
 
             case Action::READ:
-                if (args["category"].count() > 0 && args["item"].count() > 0 && args["entry"].count() > 0) {
-                    std::string value = wObj.getCategory(args["category"].as<std::string>())
-                            .getItem(args["item"].as<std::string>())
-                            .getEntry(args["entry"].as<std::string>());
-                    std::cout << value;
-                } else if (args["category"].count() > 0 && args["item"].count() > 0) {
-                    std::cout << getJSON(wObj, args["category"].as<std::string>(), args["item"].as<std::string>());
-                } else if (args["category"].count() > 0) {
-                    Category cat = wObj.getCategory(args["category"].as<std::string>());
-                    std::cout << getJSON(wObj, args["category"].as<std::string>());
+                if (args["category"].count()) {
+                    if (args["item"].count()) {
+                        if (args["entry"].count()) {
+                            std::string value = wObj.getCategory(args["category"].as<std::string>())
+                                    .getItem(args["item"].as<std::string>())
+                                    .getEntry(args["entry"].as<std::string>());
+                            std::cout << value;
+                        } else {
+                            std::cout << getJSON(wObj, args["category"].as<std::string>(),
+                                                 args["item"].as<std::string>());
+                        }
+                    } else if (args["entry"].count()) {
+                        throw std::invalid_argument("Error: missing item argument(s).");
+                    } else {
+                        std::cout << getJSON(wObj, args["category"].as<std::string>());
+                    }
+                } else if (args["item"].count() || args["entry"].count()) {
+                    throw std::invalid_argument("Error: missing category argument(s).");
                 } else {
                     std::cout << getJSON(wObj);
                 }
@@ -94,6 +102,9 @@ int App::run(int argc, char *argv[]) {
         }
         return 0;
     } catch (std::out_of_range &e) {
+        std::cerr << e.what();
+        return 1;
+    } catch (std::invalid_argument &e) {
         std::cerr << e.what();
         return 1;
     }
