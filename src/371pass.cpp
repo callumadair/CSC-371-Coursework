@@ -67,9 +67,8 @@ int App::run(int argc, char *argv[]) {
                     std::string entry_value = entry_pair.substr(entry_pair.find(entry_delimiter) + 1,
                                                                 entry_pair.length());
                 }
-                break;
             }
-
+            break;
 
         case Action::READ:
             if (args["category"].as<std::string>().length() > 0
@@ -106,6 +105,7 @@ int App::run(int argc, char *argv[]) {
                     return 1;
                 }
             }
+            break;
 
 
         case Action::UPDATE:
