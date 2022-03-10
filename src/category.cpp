@@ -116,7 +116,7 @@ bool Category::deleteItem(const std::string item_identifier) {
         items.erase(item_identifier);
         if(items.find(item_identifier) == items.end()) return true;
     }
-    throw std::out_of_range("No such item found.");
+    throw std::out_of_range("Error: invalid item argument(s).");
 }
 
 /* Example:
@@ -138,9 +138,9 @@ bool operator==(const Category &lhs, const Category &rhs) {
   std::string s = cObj.str();*/
 std::string Category::str() const {
     std::stringstream sstr;
-    sstr << "\"" << identifier << "\":{";
+    sstr << "{";
     for (auto it = items.begin(); it != items.end(); it++) {
-        sstr << it->second.str() << "";
+        sstr << "\"" << it->first << "\":" << it->second.str() << "";
         if (std::next(it) != items.end()) sstr << ",";
     }
     sstr << "}";

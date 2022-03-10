@@ -64,7 +64,7 @@ std::string Item::getEntry(const std::string key) {
     if (search != entries.end()) {
         return search->second;
     } else {
-        throw std::out_of_range("No such key found.");
+        throw std::out_of_range("Error: invalid entry argument(s).");
     }
 }
 
@@ -100,7 +100,7 @@ bool operator==(const Item &lhs, const Item &rhs) {
   std::string s = iObj.str();*/
 std::string Item::str() const {
     std::stringstream sstr;
-    sstr << "\"" << identifier << "\":{";
+    sstr << "{";
     for (auto it = entries.begin(); it != entries.end(); it++) {
         sstr << "\"" << it->first << "\":\"" << it->second << "\"";
         if (std::next(it) != entries.end()) sstr << ",";

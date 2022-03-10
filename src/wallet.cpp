@@ -87,7 +87,7 @@ Category Wallet::getCategory(std::string category_identifier) {
         Category &ref = search->second;
         return ref;
     } else {
-        throw std::out_of_range("No such item found.");
+        throw std::out_of_range("Error: invalid category argument(s).");
     }
 }
 
@@ -238,7 +238,7 @@ std::string Wallet::str() const {
     std::stringstream sstr;
     sstr << "{";
     for (auto it = categories.begin(); it != categories.end(); it++) {
-        sstr << it->second.str();
+        sstr << "\"" << it->first << "\":" << it->second.str();
         if (std::next(it) != categories.end()) sstr << ",";
     }
     sstr << "}";
