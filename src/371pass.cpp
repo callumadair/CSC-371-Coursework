@@ -54,15 +54,34 @@ int App::run(int argc, char *argv[]) {
     try {
         switch (a) {
             case Action::CREATE:
-                if (args["category"].count() > 0 && args["item"].count() > 0
-                    && args["entry"].count() > 0) {
-                    std::string entry_pair = args["entry"].as<std::string>();
-                    std::string entry_delimiter = ",";
-                    if (entry_pair.find(entry_delimiter)) {
-                        std::string entry_identifier = entry_pair.substr(0, entry_pair.find(entry_delimiter));
-                        std::string entry_value = entry_pair.substr(entry_pair.find(entry_delimiter) + 1,
-                                                                    entry_pair.length());
+                if (args["category"].count()) {
+                    if (args["item"].count()) {
+                        if (args["entry"].count()) {
+                            std::string entry_pair = args["entry"].as<std::string>();
+                            std::string entry_delimiter = ",";
+                            if (entry_pair.find(entry_delimiter)) {
+                                std::string entry_identifier = entry_pair.substr(0, entry_pair.find(entry_delimiter));
+                                std::string entry_value = entry_pair.substr(entry_pair.find(entry_delimiter) + 1,
+                                                                            entry_pair.length());
+                                wObj.newCategory(args["category"].as<std::string>()).newItem(
+                                        args["item"].as<std::string>()).addEntry(entry_identifier, entry_value);
+                            } else {
+                                wObj.newCategory(args["category"].as<std::string>()).newItem(
+                                        args["item"].as<std::string>()).addEntry(entry_pair, "");
+                            }
+                        } else {
+                            wObj.newCategory(args["category"].as<std::string>()).newItem(
+                                    args["item"].as<std::string>());
+                        }
+                    } else if (args["entry"].count()) {
+                        throw std::invalid_argument("Error: missing item argument(s).");
+                    } else {
+                        wObj.newCategory(args["category"].as<std::string>());
                     }
+                } else if (args["item"].count() || args["entry"].count()) {
+                    throw std::invalid_argument("Error: missing category argument(s).");
+                } else {
+                    throw std::invalid_argument("Error: missing category, item or entry argument(s).");
                 }
                 break;
 
@@ -90,7 +109,7 @@ int App::run(int argc, char *argv[]) {
                 }
                 break;
             case Action::UPDATE:
-                throw std::runtime_error("update not implemented");
+
                 break;
 
             case Action::DELETE:
