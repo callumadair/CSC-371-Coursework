@@ -53,8 +53,8 @@ int App::run(int argc, char *argv[]) {
     const Action a = parseActionArgument(args);
     switch (a) {
         case Action::CREATE:
-            if (args["category"].as<std::string>().length() > 0 && args["item"].as<std::string>().length() > 0
-                && args["entry"].as<std::string>().length() > 0) {
+            if (args["category"].count() > 0 && args["item"].count() > 0
+                && args["entry"].count() > 0) {
                 std::string entry_pair = args["entry"].as<std::string>();
                 std::string entry_delimiter = ",";
                 if (entry_pair.find(entry_delimiter)) {
@@ -66,39 +66,39 @@ int App::run(int argc, char *argv[]) {
             break;
 
         case Action::READ:
-            if (args["category"].as<std::string>().length() > 0
-                && args["item"].as<std::string>().length() > 0
-                && args["entry"].as<std::string>().length() > 0) {
+            if (args["category"].count() > 0 && args["item"].count() > 0 && args["entry"].count() > 0) {
                 try {
                     std::string value = wObj.getCategory(args["category"].as<std::string>())
                             .getItem(args["item"].as<std::string>())
                             .getEntry(args["entry"].as<std::string>());
-                    std::cout << value << std::endl;
+                    std::cout << value;
                     return 0;
                 } catch (std::out_of_range &e) {
-                    std::cerr << e.what() << std::endl;
+                    std::cerr << e.what();
                     return 1;
                 }
-            } else if (args["category"].as<std::string>().length() > 0
-                       && args["item"].as<std::string>().length() > 0) {
+            } else if (args["category"].count() > 0 && args["item"].count() > 0) {
                 try {
                     Item item = wObj.getCategory(args["category"].as<std::string>())
                             .getItem(args["item"].as<std::string>());
                     std::cout << item.str();
                     return 0;
                 } catch (std::out_of_range &e) {
-                    std::cerr << e.what() << std::endl;
+                    std::cerr << e.what();
                     return 1;
                 }
-            } else if (args["category"].as<std::string>().length() > 0) {
+            } else if (args["category"].count() > 0) {
                 try {
                     Category cat = wObj.getCategory(args["category"].as<std::string>());
                     std::cout << cat.str();
                     return 0;
                 } catch (std::out_of_range &e) {
-                    std::cerr << e.what() << std::endl;
+                    std::cerr << e.what();
                     return 1;
                 }
+            } else {
+                std::cout << wObj.str();
+
             }
             break;
 
