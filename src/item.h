@@ -37,7 +37,7 @@ public:
 
     void mergeEntries(Item &other);
 
-    std::string getEntry(std::string key);
+    std::string getEntry(const std::string& key);
 
     bool deleteEntry(std::string key);
 

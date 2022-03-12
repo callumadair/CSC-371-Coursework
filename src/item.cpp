@@ -59,7 +59,7 @@ void Item::mergeEntries(Item &other) {
   Item iObj{"identIdent"};
   iObj.addEntry("key", "value");
   auto value = iObj.getEntry("key");*/
-std::string Item::getEntry(const std::string key) {
+std::string Item::getEntry(const std::string& key) {
     auto search = entries.find(key);
     if (search != entries.end()) {
         return search->second;
