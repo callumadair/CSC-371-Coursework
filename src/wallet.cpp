@@ -82,12 +82,11 @@ bool Wallet::addCategory(Category category) {
   auto cObj = wObj.getCategory("categoryIdent");*/
 
 Category Wallet::getCategory(std::string category_identifier) {
-    auto search = categories.find(category_identifier);
-    if (search != categories.end()) {
+    if (categories.find(category_identifier) != categories.end()) {
         Category &ref = search->second;
         return ref;
     } else {
-        throw std::out_of_range("category");
+        throw std::out_of_range("Error: invalid category argument(s).");
     }
 }
 
