@@ -99,12 +99,10 @@ bool operator==(const Item &lhs, const Item &rhs) {
   Item iObj{"itemIdent"};
   std::string s = iObj.str();*/
 std::string Item::str() const {
-    std::stringstream sstr;
-    sstr << "{";
-    for (auto it = entries.begin(); it != entries.end(); it++) {
-        sstr << "\"" << it->first << "\":\"" << it->second << "\"";
-        if (std::next(it) != entries.end()) sstr << ",";
+    nlohmann::json j;
+    for (const auto & entry : entries) {
+        j[entry.first] = entry.second;
+
     }
-    sstr << "}";
-    return sstr.str();
+    return j.dump();
 }

@@ -137,12 +137,9 @@ bool operator==(const Category &lhs, const Category &rhs) {
   Category cObj{"categoryIdent"};
   std::string s = cObj.str();*/
 std::string Category::str() const {
-    std::stringstream sstr;
-    sstr << "{";
-    for (auto it = items.begin(); it != items.end(); it++) {
-        sstr << "\"" << it->first << "\":" << it->second.str() << "";
-        if (std::next(it) != items.end()) sstr << ",";
+    nlohmann::json j;
+    for (const auto & item : items) {
+        j[item.first] = nlohmann::json::parse(item.second.str());
     }
-    sstr << "}";
-    return sstr.str();
+    return j.dump();
 }

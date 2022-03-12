@@ -81,7 +81,7 @@ bool Wallet::addCategory(Category category) {
   wObj.newCategory("categoryIdent");
   auto cObj = wObj.getCategory("categoryIdent");*/
 
-Category& Wallet::getCategory(const std::string &category_identifier) {
+Category &Wallet::getCategory(const std::string &category_identifier) {
     auto search = categories.find(category_identifier);
     if (search != categories.end()) {
         Category &ref = search->second;
@@ -183,7 +183,7 @@ bool Wallet::load(const std::string &filename) {
                 }
 
                 try {
-                    Item existing_item = new_category.getItem(item_it.key());
+                    Item &existing_item = new_category.getItem(item_it.key());
                     existing_item.mergeEntries(new_item);
                 } catch (std::out_of_range &e) {
                     new_category.addItem(new_item);
@@ -191,12 +191,13 @@ bool Wallet::load(const std::string &filename) {
             }
 
             try {
-                Category existing_category = getCategory(cat_it.key());
+                Category &existing_category = getCategory(cat_it.key());
                 existing_category.mergeItems(new_category);
             } catch (std::out_of_range &e) {
                 addCategory(new_category);
             }
         }
+        json_file.close();
         return true;
     }
     throw std::runtime_error("Json file did not open successfully");
@@ -235,12 +236,9 @@ bool operator==(const Wallet &lhs, const Wallet &rhs) {
   std::string s = wObj.str();*/
 
 std::string Wallet::str() const {
-    std::stringstream sstr;
-    sstr << "{";
-    for (auto it = categories.begin(); it != categories.end(); it++) {
-        sstr << "\"" << it->first << "\":" << it->second.str();
-        if (std::next(it) != categories.end()) sstr << ",";
+    nlohmann::json j;
+    for (const auto &category: categories) {
+        j[category.first] = nlohmann::json::parse(category.second.str());
     }
-    sstr << "}";
-    return sstr.str();
+    return j.dump();
 }
