@@ -56,9 +56,9 @@ int App::run(int argc, char *argv[]) {
         switch (a) {
             case Action::CREATE:
                 if (args["category"].count()) {
-
                     if (args["item"].count()) {
                         Category new_cat = wObj.newCategory(args["category"].as<std::string>());
+
                         if (args["entry"].count()) {
                             Item new_item = new_cat.newItem(args["item"].as<std::string>());
                             std::string entry_input = args["entry"].as<std::string>();
@@ -69,15 +69,11 @@ int App::run(int argc, char *argv[]) {
                                 std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1,
                                                                              entry_input.length());
                                 new_item.addEntry(entry_identifier, entry_value);
-
                             } else {
                                 new_item.addEntry(entry_input, "");
                             }
-                            wObj.save(args["db"].as<std::string>());
-
                         } else {
                             new_cat.newItem(args["item"].as<std::string>());
-                            wObj.save(args["db"].as<std::string>());
                         }
 
                     } else if (args["entry"].count()) {
@@ -85,17 +81,15 @@ int App::run(int argc, char *argv[]) {
 
                     } else {
                         wObj.newCategory(args["category"].as<std::string>());
-                        wObj.save(args["db"].as<std::string>());
 
                     }
-
                 } else if (args["item"].count() || args["entry"].count()) {
                     throw std::out_of_range("Error: missing category argument(s).");
 
                 } else {
                     throw std::out_of_range("Error: missing category, item or entry argument(s).");
-
                 }
+                wObj.save(args["db"].as<std::string>());
                 break;
 
             case Action::READ:
@@ -195,10 +189,17 @@ int App::run(int argc, char *argv[]) {
                     throw std::out_of_range("Error: missing category, item or entry argument(s).");
 
                 }
+                wObj.save(args["db"].as<std::string>());
                 break;
 
             case Action::DELETE:
-                throw std::runtime_error("delete not implemented");
+                if (args["category"].count()) {
+                    if(args["item"].count()) {
+                        if (args["entry"].count()) {
+
+                        }
+                    }
+                }
                 break;
 
             default:
