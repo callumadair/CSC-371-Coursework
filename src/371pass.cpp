@@ -58,8 +58,9 @@ int App::run(int argc, char *argv[]) {
                 if (args["category"].count()) {
 
                     if (args["item"].count()) {
-
+                        Category new_cat = wObj.newCategory(args["category"].as<std::string>());
                         if (args["entry"].count()) {
+                            Item new_item = new_cat.newItem(args["item"].as<std::string>());
                             std::string entry_input = args["entry"].as<std::string>();
                             std::string entry_delimiter = ",";
 
@@ -67,18 +68,15 @@ int App::run(int argc, char *argv[]) {
                                 std::string entry_identifier = entry_input.substr(0, entry_input.find(entry_delimiter));
                                 std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1,
                                                                              entry_input.length());
-                                wObj.newCategory(args["category"].as<std::string>()).newItem(
-                                        args["item"].as<std::string>()).addEntry(entry_identifier, entry_value);
+                                new_item.addEntry(entry_identifier, entry_value);
 
                             } else {
-                                wObj.newCategory(args["category"].as<std::string>()).newItem(
-                                        args["item"].as<std::string>()).addEntry(entry_input, "");
+                                new_item.addEntry(entry_input, "");
                             }
                             wObj.save(args["db"].as<std::string>());
 
                         } else {
-                            wObj.newCategory(args["category"].as<std::string>())
-                                    .newItem(args["item"].as<std::string>());
+                            new_cat.newItem(args["item"].as<std::string>());
                             wObj.save(args["db"].as<std::string>());
                         }
 
@@ -128,7 +126,9 @@ int App::run(int argc, char *argv[]) {
                     std::string key_delimiter = ":";
 
                     if (args["item"].count()) {
+                        Category cur_cat = wObj.getCategory(args["category"].as<std::string>());
                         if (args["entry"].count()) {
+                            Item cur_item = cur_cat.getItem(args["item"].as<std::string>());
                             std::string entry_input = args["entry"].as<std::string>();
                             std::string value_delimiter = ",";
 
@@ -137,24 +137,17 @@ int App::run(int argc, char *argv[]) {
                                         entry_input.substr(0, entry_input.find(key_delimiter));
                                 std::string new_entry_ident =
                                         entry_input.substr(entry_input.find(key_delimiter) + 1, entry_input.length());
-                                std::string entry_val = wObj.getCategory(args["category"].as<std::string>())
-                                        .getItem(args["item"].as<std::string>()).getEntry(old_entry_ident);
+                                std::string entry_val = cur_item.getEntry(old_entry_ident);
 
-                                wObj.getCategory(args["category"].as<std::string>())
-                                        .getItem(args["item"].as<std::string>())
-                                        .deleteEntry(old_entry_ident);
-                                wObj.getCategory(args["category"].as<std::string>())
-                                        .getItem(args["item"].as<std::string>())
-                                        .addEntry(new_entry_ident, entry_val);
+                                cur_item.deleteEntry(old_entry_ident);
+                                cur_item.addEntry(new_entry_ident, entry_val);
 
                             } else if (entry_input.find(value_delimiter)) {
                                 std::string entry_identifier =
                                         entry_input.substr(0, entry_input.find(value_delimiter));
                                 std::string new_entry_val =
                                         entry_input.substr(entry_input.find(value_delimiter) + 1, entry_input.length());
-                                wObj.getCategory(args["category"].as<std::string>())
-                                        .getItem(args["item"].as<std::string>())
-                                        .addEntry(entry_identifier, new_entry_val);
+                                cur_item.addEntry(entry_identifier, new_entry_val);
                             } else {
                                 throw std::invalid_argument("entry");
                             }
@@ -167,14 +160,11 @@ int App::run(int argc, char *argv[]) {
                                         item_input.substr(0, item_input.find(key_delimiter));
                                 std::string new_entry_ident =
                                         item_input.substr(item_input.find(key_delimiter) + 1, item_input.length());
-                                Item cur_item = wObj.getCategory(args["category"].as<std::string>())
-                                        .getItem(old_item_ident);
+                                Item cur_item = cur_cat.getItem(old_item_ident);
                                 cur_item.setIdent(new_entry_ident);
 
-                                wObj.getCategory(args["category"].as<std::string>())
-                                        .deleteItem(old_item_ident);
-                                wObj.getCategory(args["category"].as<std::string>())
-                                        .addItem(cur_item);
+                                cur_cat.deleteItem(old_item_ident);
+                                cur_cat.addItem(cur_item);
 
                             } else {
                                 throw std::invalid_argument("item");
