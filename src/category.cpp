@@ -47,14 +47,14 @@ void Category::setIdent(const std::string identifier) {
 Item& Category::newItem(const std::string item_identifier) {
     auto search = items.find(item_identifier);
     if (search == items.end()) {
-        Item new_item(item_identifier);
-        items.insert(std::make_pair(item_identifier, new_item));
+        auto *new_item = new Item(item_identifier);
+        items.insert(std::make_pair(item_identifier, *new_item));
 
         if (items.find(item_identifier) == items.end()) {
             throw std::runtime_error("Item was not inserted successfully.");
         }
 
-        Item &ref = new_item;
+        Item &ref = *new_item;
         return ref;
     } else {
         return items.find(item_identifier)->second;
@@ -95,7 +95,7 @@ void Category::mergeItems(Category other) {
   cObj.newItem("itemIdent");
   auto iObj = cObj.getItem("itemIdent");*/
 
-Item &Category::getItem(const std::string item_identifier) {
+Item &Category::getItem(const std::string& item_identifier) {
     auto search = items.find(item_identifier);
     if (search != items.end()) {
         Item &ref = search->second;
@@ -110,7 +110,7 @@ Item &Category::getItem(const std::string item_identifier) {
   cObj.newItem("itemIdent");
   bool result = cObj.deleteItem("itemIdent");*/
 
-bool Category::deleteItem(const std::string item_identifier) {
+bool Category::deleteItem(const std::string& item_identifier) {
     auto search = items.find(item_identifier);
     if (search != items.end()) {
         items.erase(item_identifier);

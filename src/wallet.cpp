@@ -38,17 +38,17 @@ bool Wallet::empty() {
   Wallet wObj{};
   wObj.newCategory("categoryIdent");*/
 
-Category& Wallet::newCategory(std::string category_identifier) {
+Category &Wallet::newCategory(std::string category_identifier) {
     auto search = categories.find(category_identifier);
     if (search == categories.end()) {
-        Category new_category(category_identifier);
-        categories.insert(std::make_pair(category_identifier, new_category));
+        auto *new_category = new Category(category_identifier);
+        categories.insert(std::make_pair(category_identifier, *new_category));
 
         if (categories.find(category_identifier) == categories.end()) {
             throw std::runtime_error("Category was not inserted successfully.");
         }
 
-        Category &ref = new_category;
+        Category &ref = *new_category;
         return ref;
     } else {
         return categories.find(category_identifier)->second;
@@ -81,7 +81,7 @@ bool Wallet::addCategory(Category category) {
   wObj.newCategory("categoryIdent");
   auto cObj = wObj.getCategory("categoryIdent");*/
 
-Category Wallet::getCategory(std::string category_identifier) {
+Category& Wallet::getCategory(const std::string &category_identifier) {
     auto search = categories.find(category_identifier);
     if (search != categories.end()) {
         Category &ref = search->second;
@@ -97,7 +97,7 @@ Category Wallet::getCategory(std::string category_identifier) {
   wObj.newCategory("categoryIdent");
   wObj.deleteCategory("categoryIdent");*/
 
-bool Wallet::deleteCategory(const std::string category_identifier) {
+bool Wallet::deleteCategory(const std::string &category_identifier) {
     auto search = categories.find(category_identifier);
     if (search != categories.end()) {
         categories.erase(category_identifier);
@@ -162,7 +162,7 @@ bool Wallet::deleteCategory(const std::string category_identifier) {
   Wallet wObj{};
   wObj.load("database.json");*/
 
-bool Wallet::load(std::string filename) {
+bool Wallet::load(const std::string &filename) {
     std::fstream json_file(filename);
     if (json_file.is_open()) {
         std::string json_str((std::istreambuf_iterator<char>(json_file)),
@@ -208,7 +208,7 @@ bool Wallet::load(std::string filename) {
   ...
   wObj.save("database.json");*/
 
-bool Wallet::save(std::string filename) {
+bool Wallet::save(const std::string &filename) const {
     std::fstream json_file(filename);
     if (json_file.is_open()) {
         json_file << str();

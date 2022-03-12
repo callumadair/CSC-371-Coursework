@@ -29,13 +29,13 @@ public:
 
     bool addCategory(Category category);
 
-    Category getCategory(std::string category_identifier);
+    Category& getCategory(const std::string& category_identifier);
 
-    bool deleteCategory(const std::string category_identifier);
+    bool deleteCategory(const std::string& category_identifier);
 
-    bool load(std::string filename);
+    bool load(const std::string& filename);
 
-    bool save(std::string filename);
+    bool save(const std::string& filename) const;
 
     friend bool operator==(const Wallet &lhs, const Wallet &rhs);
 
