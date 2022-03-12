@@ -210,7 +210,7 @@ bool Wallet::load(const std::string &filename) {
   wObj.save("database.json");*/
 
 bool Wallet::save(const std::string &filename) const {
-    std::fstream json_file(filename);
+    std::fstream json_file(filename, std::fstream::out | std::fstream::trunc);
     if (json_file.is_open()) {
         json_file << str();
         return true;
