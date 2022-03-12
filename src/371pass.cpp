@@ -57,23 +57,23 @@ int App::run(int argc, char *argv[]) {
             case Action::CREATE:
                 if (args["category"].count()) {
                     if (args["item"].count()) {
-                        Category new_cat = wObj.newCategory(args["category"].as<std::string>());
-
                         if (args["entry"].count()) {
-                            Item new_item = new_cat.newItem(args["item"].as<std::string>());
+
                             std::string entry_input = args["entry"].as<std::string>();
                             std::string entry_delimiter = ",";
 
                             if (entry_input.find(entry_delimiter)) {
                                 std::string entry_identifier = entry_input.substr(0, entry_input.find(entry_delimiter));
-                                std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1,
-                                                                             entry_input.length());
-                                new_item.addEntry(entry_identifier, entry_value);
+                                std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1);
+                                wObj.newCategory(args["category"].as<std::string>()).newItem(
+                                        args["item"].as<std::string>()).addEntry(entry_identifier, entry_value);
                             } else {
-                                new_item.addEntry(entry_input, "");
+                                wObj.newCategory(args["category"].as<std::string>()).newItem(
+                                        args["item"].as<std::string>()).addEntry(entry_input, "");
                             }
                         } else {
-                            new_cat.newItem(args["item"].as<std::string>());
+                            wObj.newCategory(args["category"].as<std::string>()).newItem(
+                                    args["item"].as<std::string>());
                         }
 
                     } else if (args["entry"].count()) {
@@ -89,7 +89,6 @@ int App::run(int argc, char *argv[]) {
                 } else {
                     throw std::out_of_range("Error: missing category, item or entry argument(s).");
                 }
-                wObj.save(args["db"].as<std::string>());
                 break;
 
             case Action::READ:
@@ -120,9 +119,9 @@ int App::run(int argc, char *argv[]) {
                     std::string key_delimiter = ":";
 
                     if (args["item"].count()) {
-                        Category cur_cat = wObj.getCategory(args["category"].as<std::string>());
+                        std::string cat_str = args["category"].as<std::string>();
                         if (args["entry"].count()) {
-                            Item cur_item = cur_cat.getItem(args["item"].as<std::string>());
+                            std::string item_str = args["item"].as<std::string>();
                             std::string entry_input = args["entry"].as<std::string>();
                             std::string value_delimiter = ",";
 
@@ -130,18 +129,35 @@ int App::run(int argc, char *argv[]) {
                                 std::string old_entry_ident =
                                         entry_input.substr(0, entry_input.find(key_delimiter));
                                 std::string new_entry_ident =
-                                        entry_input.substr(entry_input.find(key_delimiter) + 1, entry_input.length());
-                                std::string entry_val = cur_item.getEntry(old_entry_ident);
+                                        entry_input.substr(entry_input.find(key_delimiter) + 1);
 
-                                cur_item.deleteEntry(old_entry_ident);
-                                cur_item.addEntry(new_entry_ident, entry_val);
+                                if (new_entry_ident.empty()) {
+                                    throw std::invalid_argument("entry");
+                                }
+
+                                std::string entry_val = wObj.getCategory(cat_str).getItem(item_str).getEntry(
+                                        old_entry_ident);
+
+                                wObj.getCategory(cat_str)
+                                        .getItem(item_str)
+                                        .addEntry(new_entry_ident, entry_val);
+                                wObj.getCategory(cat_str)
+                                        .getItem(item_str)
+                                        .deleteEntry(old_entry_ident);
 
                             } else if (entry_input.find(value_delimiter)) {
                                 std::string entry_identifier =
                                         entry_input.substr(0, entry_input.find(value_delimiter));
                                 std::string new_entry_val =
-                                        entry_input.substr(entry_input.find(value_delimiter) + 1, entry_input.length());
-                                cur_item.addEntry(entry_identifier, new_entry_val);
+                                        entry_input.substr(entry_input.find(value_delimiter) + 1);
+
+                                if (new_entry_val.empty()) {
+                                    throw std::invalid_argument("entry");
+                                }
+
+                                wObj.getCategory(cat_str)
+                                        .getItem(item_str)
+                                        .addEntry(entry_identifier, new_entry_val);
                             } else {
                                 throw std::invalid_argument("entry");
                             }
@@ -153,12 +169,12 @@ int App::run(int argc, char *argv[]) {
                                 std::string old_item_ident =
                                         item_input.substr(0, item_input.find(key_delimiter));
                                 std::string new_entry_ident =
-                                        item_input.substr(item_input.find(key_delimiter) + 1, item_input.length());
-                                Item cur_item = cur_cat.getItem(old_item_ident);
+                                        item_input.substr(item_input.find(key_delimiter) + 1);
+                                Item &cur_item = wObj.getCategory(cat_str).getItem(old_item_ident);
                                 cur_item.setIdent(new_entry_ident);
 
-                                cur_cat.deleteItem(old_item_ident);
-                                cur_cat.addItem(cur_item);
+                                wObj.getCategory(cat_str).addItem(cur_item);
+                                wObj.getCategory(cat_str).deleteItem(old_item_ident);
 
                             } else {
                                 throw std::invalid_argument("item");
@@ -171,12 +187,12 @@ int App::run(int argc, char *argv[]) {
                             std::string old_cat_ident =
                                     cat_input.substr(0, cat_input.find(key_delimiter));
                             std::string new_cat_ident =
-                                    cat_input.substr(cat_input.find(key_delimiter) + 1, cat_input.length());
-                            Category cur_cat = wObj.getCategory(old_cat_ident);
+                                    cat_input.substr(cat_input.find(key_delimiter));
+                            Category &cur_cat = wObj.getCategory(old_cat_ident);
                             cur_cat.setIdent(new_cat_ident);
 
-                            wObj.deleteCategory(old_cat_ident);
                             wObj.addCategory(cur_cat);
+                            wObj.deleteCategory(old_cat_ident);
 
                         } else {
                             throw std::invalid_argument("category");
@@ -189,22 +205,33 @@ int App::run(int argc, char *argv[]) {
                     throw std::out_of_range("Error: missing category, item or entry argument(s).");
 
                 }
-                wObj.save(args["db"].as<std::string>());
                 break;
 
             case Action::DELETE:
                 if (args["category"].count()) {
-                    if(args["item"].count()) {
+                    std::string cat_str = args["category"].as<std::string>();
+                    if (args["item"].count()) {
+                        std::string item_str = args["item"].as<std::string>();
                         if (args["entry"].count()) {
-
+                            wObj.getCategory(cat_str).getItem(args["item"].as<std::string>()).deleteEntry(
+                                    args["entry"].as<std::string>());
+                        } else {
+                            wObj.getCategory(cat_str).deleteItem(args["item"].as<std::string>());
                         }
+                    } else if (args["entry"].count()) {
+                        throw std::out_of_range("Error: missing item argument(s).");
+                    } else {
+                        wObj.deleteCategory(args["category"].as<std::string>());
                     }
+                } else {
+                    throw std::out_of_range("Error: missing category, item or entry argument(s).");
                 }
                 break;
 
             default:
                 throw std::runtime_error("Unknown action not implemented");
         }
+        wObj.save(args["db"].as<std::string>());
 
     } catch (std::invalid_argument &e) {
         std::cerr << "Error: invalid " << e.what() << " argument(s).";
