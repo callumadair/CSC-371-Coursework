@@ -54,7 +54,6 @@ int App::run(int argc, char *argv[]) {
     try {
         const Action a = parseActionArgument(args);
         switch (a) {
-            // maybe check if category, item, entry exists first?
             case Action::CREATE:
                 if (args["category"].count()) {
 
@@ -125,7 +124,7 @@ int App::run(int argc, char *argv[]) {
                 }
                 break;
             case Action::UPDATE:
-                throw std::runtime_error("delete not implemented");
+                throw std::runtime_error("update not implemented");
                 break;
 
             case Action::DELETE:
