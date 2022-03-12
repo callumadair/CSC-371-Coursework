@@ -38,7 +38,7 @@ bool Wallet::empty() {
   Wallet wObj{};
   wObj.newCategory("categoryIdent");*/
 
-Category Wallet::newCategory(std::string category_identifier) {
+Category& Wallet::newCategory(std::string category_identifier) {
     auto search = categories.find(category_identifier);
     if (search == categories.end()) {
         Category new_category(category_identifier);

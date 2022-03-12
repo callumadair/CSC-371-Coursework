@@ -44,7 +44,7 @@ void Category::setIdent(const std::string identifier) {
   Category cObj{"categoryIdent"};
   cObj.newItem("itemIdent");*/
 
-Item Category::newItem(const std::string item_identifier) {
+Item& Category::newItem(const std::string item_identifier) {
     auto search = items.find(item_identifier);
     if (search == items.end()) {
         Item new_item(item_identifier);

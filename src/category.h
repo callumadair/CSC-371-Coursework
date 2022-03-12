@@ -29,7 +29,7 @@ public:
 
     void setIdent(std::string identifier);
 
-    Item newItem(const std::string item_identifier);
+    Item& newItem(const std::string item_identifier);
 
     bool addItem(Item item);
 
