@@ -82,7 +82,8 @@ bool Wallet::addCategory(Category category) {
   auto cObj = wObj.getCategory("categoryIdent");*/
 
 Category Wallet::getCategory(std::string category_identifier) {
-    if (categories.find(category_identifier) != categories.end()) {
+    auto search = categories.find(category_identifier);
+    if (search != categories.end()) {
         Category &ref = search->second;
         return ref;
     } else {

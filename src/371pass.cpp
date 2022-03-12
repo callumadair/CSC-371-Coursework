@@ -50,38 +50,54 @@ int App::run(int argc, char *argv[]) {
     Wallet wObj{};
     wObj.load(db);
 
-    const Action a = parseActionArgument(args);
+
     try {
+        const Action a = parseActionArgument(args);
         switch (a) {
+            // maybe check if category, item, entry exists first?
             case Action::CREATE:
                 if (args["category"].count()) {
+
                     if (args["item"].count()) {
+
                         if (args["entry"].count()) {
                             std::string entry_pair = args["entry"].as<std::string>();
                             std::string entry_delimiter = ",";
+
                             if (entry_pair.find(entry_delimiter)) {
                                 std::string entry_identifier = entry_pair.substr(0, entry_pair.find(entry_delimiter));
                                 std::string entry_value = entry_pair.substr(entry_pair.find(entry_delimiter) + 1,
                                                                             entry_pair.length());
                                 wObj.newCategory(args["category"].as<std::string>()).newItem(
                                         args["item"].as<std::string>()).addEntry(entry_identifier, entry_value);
+
                             } else {
                                 wObj.newCategory(args["category"].as<std::string>()).newItem(
                                         args["item"].as<std::string>()).addEntry(entry_pair, "");
                             }
+                            wObj.save(args["db"].as<std::string>());
+
                         } else {
-                            wObj.newCategory(args["category"].as<std::string>()).newItem(
-                                    args["item"].as<std::string>());
+                            wObj.newCategory(args["category"].as<std::string>())
+                                    .newItem(args["item"].as<std::string>());
+                            wObj.save(args["db"].as<std::string>());
                         }
+
                     } else if (args["entry"].count()) {
-                        throw std::invalid_argument("Error: missing item argument(s).");
+                        throw std::out_of_range("Error: missing item argument(s).");
+
                     } else {
                         wObj.newCategory(args["category"].as<std::string>());
+                        wObj.save(args["db"].as<std::string>());
+
                     }
+
                 } else if (args["item"].count() || args["entry"].count()) {
-                    throw std::invalid_argument("Error: missing category argument(s).");
+                    throw std::out_of_range("Error: missing category argument(s).");
+
                 } else {
-                    throw std::invalid_argument("Error: missing category, item or entry argument(s).");
+                    throw std::out_of_range("Error: missing category, item or entry argument(s).");
+
                 }
                 break;
 
@@ -98,18 +114,18 @@ int App::run(int argc, char *argv[]) {
                                                  args["item"].as<std::string>());
                         }
                     } else if (args["entry"].count()) {
-                        throw std::invalid_argument("Error: missing item argument(s).");
+                        throw std::out_of_range("Error: missing item argument(s).");
                     } else {
                         std::cout << getJSON(wObj, args["category"].as<std::string>());
                     }
                 } else if (args["item"].count() || args["entry"].count()) {
-                    throw std::invalid_argument("Error: missing category argument(s).");
+                    throw std::out_of_range("Error: missing category argument(s).");
                 } else {
                     std::cout << getJSON(wObj);
                 }
                 break;
             case Action::UPDATE:
-
+                throw std::runtime_error("delete not implemented");
                 break;
 
             case Action::DELETE:
@@ -119,16 +135,14 @@ int App::run(int argc, char *argv[]) {
             default:
                 throw std::runtime_error("Unknown action not implemented");
         }
-        return 0;
+
+    } catch (std::invalid_argument &e) {
+        std::cerr << "Error: invalid " << e.what() << " argument(s).";
+        return 1;
     } catch (std::out_of_range &e) {
         std::cerr << e.what();
         return 1;
-    } catch (std::invalid_argument &e) {
-        std::cerr << e.what();
-        return 1;
     }
-
-
     return 0;
 }
 
