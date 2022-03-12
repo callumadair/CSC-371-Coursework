@@ -64,7 +64,7 @@ std::string Item::getEntry(const std::string key) {
     if (search != entries.end()) {
         return search->second;
     } else {
-        throw std::out_of_range("Error: invalid entry argument(s).");
+        throw std::out_of_range("entry");
     }
 }
 

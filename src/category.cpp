@@ -116,7 +116,7 @@ bool Category::deleteItem(const std::string item_identifier) {
         items.erase(item_identifier);
         if(items.find(item_identifier) == items.end()) return true;
     }
-    throw std::out_of_range("Error: invalid item argument(s).");
+    throw std::out_of_range("item");
 }
 
 /* Example:

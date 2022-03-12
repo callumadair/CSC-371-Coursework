@@ -87,7 +87,7 @@ Category Wallet::getCategory(std::string category_identifier) {
         Category &ref = search->second;
         return ref;
     } else {
-        throw std::out_of_range("Error: invalid category argument(s).");
+        throw std::out_of_range("category");
     }
 }
 
