@@ -101,7 +101,7 @@ Item &Category::getItem(const std::string& item_identifier) {
         Item &ref = search->second;
         return ref;
     } else {
-        throw std::out_of_range("No such item found.");
+        throw std::out_of_range("Error: invalid item argument(s).");
     }
 }
 

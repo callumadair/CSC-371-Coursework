@@ -62,7 +62,7 @@ int App::run(int argc, char *argv[]) {
                             std::string entry_input = args["entry"].as<std::string>();
                             std::string entry_delimiter = ",";
 
-                            if (entry_input.find(entry_delimiter)) {
+                            if (entry_input.find(entry_delimiter) != std::string::npos) {
                                 std::string entry_identifier = entry_input.substr(0, entry_input.find(entry_delimiter));
                                 std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1);
                                 wObj.newCategory(args["category"].as<std::string>()).newItem(
@@ -125,7 +125,7 @@ int App::run(int argc, char *argv[]) {
                             std::string entry_input = args["entry"].as<std::string>();
                             std::string value_delimiter = ",";
 
-                            if (entry_input.find(key_delimiter)) {
+                            if (entry_input.find(key_delimiter) != std::string::npos) {
                                 std::string old_entry_ident =
                                         entry_input.substr(0, entry_input.find(key_delimiter));
                                 std::string new_entry_ident =
@@ -145,15 +145,11 @@ int App::run(int argc, char *argv[]) {
                                         .getItem(item_str)
                                         .deleteEntry(old_entry_ident);
 
-                            } else if (entry_input.find(value_delimiter)) {
+                            } else if (entry_input.find(value_delimiter) != std::string::npos) {
                                 std::string entry_identifier =
                                         entry_input.substr(0, entry_input.find(value_delimiter));
                                 std::string new_entry_val =
                                         entry_input.substr(entry_input.find(value_delimiter) + 1);
-
-                                if (new_entry_val.empty()) {
-                                    throw std::invalid_argument("entry");
-                                }
 
                                 wObj.getCategory(cat_str)
                                         .getItem(item_str)
@@ -165,7 +161,7 @@ int App::run(int argc, char *argv[]) {
                         } else {
                             std::string item_input = args["item"].as<std::string>();
 
-                            if (item_input.find(key_delimiter)) {
+                            if (item_input.find(key_delimiter) != std::string::npos) {
                                 std::string old_item_ident =
                                         item_input.substr(0, item_input.find(key_delimiter));
                                 std::string new_entry_ident =
@@ -183,7 +179,7 @@ int App::run(int argc, char *argv[]) {
                     } else {
                         std::string cat_input = args["category"].as<std::string>();
 
-                        if (cat_input.find(key_delimiter)) {
+                        if (cat_input.find(key_delimiter) != std::string::npos) {
                             std::string old_cat_ident =
                                     cat_input.substr(0, cat_input.find(key_delimiter));
                             std::string new_cat_ident =
@@ -213,10 +209,10 @@ int App::run(int argc, char *argv[]) {
                     if (args["item"].count()) {
                         std::string item_str = args["item"].as<std::string>();
                         if (args["entry"].count()) {
-                            wObj.getCategory(cat_str).getItem(args["item"].as<std::string>()).deleteEntry(
+                            wObj.getCategory(cat_str).getItem(item_str).deleteEntry(
                                     args["entry"].as<std::string>());
                         } else {
-                            wObj.getCategory(cat_str).deleteItem(args["item"].as<std::string>());
+                            wObj.getCategory(cat_str).deleteItem(item_str);
                         }
                     } else if (args["entry"].count()) {
                         throw std::out_of_range("Error: missing item argument(s).");
