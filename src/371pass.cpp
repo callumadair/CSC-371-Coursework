@@ -56,9 +56,11 @@ int App::run(int argc, char *argv[]) {
         switch (a) {
             case Action::CREATE:
                 if (args["category"].count()) {
-                    Category *new_cat = new Category(args["category"].as<std::string>());
+                    std::string cat_str = args["category"].as<std::string>();
+                    wObj.newCategory(cat_str);
                     if (args["item"].count()) {
-                        Item *new_item = new Item(args["item"].as<std::string>());
+                        std::string item_str = args["item"].as<std::string>();
+                        wObj.getCategory(cat_str).newItem(item_str);
                         if (args["entry"].count()) {
                             std::string entry_input = args["entry"].as<std::string>();
                             std::string entry_delimiter = ",";
@@ -66,17 +68,19 @@ int App::run(int argc, char *argv[]) {
                             if (entry_input.find(entry_delimiter) != std::string::npos) {
                                 std::string entry_identifier = entry_input.substr(0, entry_input.find(entry_delimiter));
                                 std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1);
-                                new_item->addEntry(entry_identifier, entry_value);
+                                wObj.getCategory(cat_str)
+                                .getItem(item_str)
+                                .addEntry(entry_identifier, entry_value);
                             } else {
-                                new_item->addEntry(entry_input, "");
+                                wObj.getCategory(cat_str)
+                                        .getItem(item_str)
+                                        .addEntry(entry_input, "");
                             }
                         }
-                        new_cat->addItem(*new_item);
                     } else if (args["entry"].count()) {
                         throw std::out_of_range("Error: missing item argument(s).");
 
                     }
-                    wObj.addCategory(*new_cat);
                 } else if (args["item"].count() || args["entry"].count()) {
                     throw std::out_of_range("Error: missing category argument(s).");
 
