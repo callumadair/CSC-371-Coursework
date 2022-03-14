@@ -56,11 +56,9 @@ int App::run(int argc, char *argv[]) {
         switch (a) {
             case Action::CREATE:
                 if (args["category"].count()) {
-                    std::string cat_str = args["category"].as<std::string>();
-                    wObj.newCategory(cat_str);
+                    Category &new_cat = wObj.newCategory(args["category"].as<std::string>());
                     if (args["item"].count()) {
-                        std::string item_str = args["item"].as<std::string>();
-                        wObj.getCategory(cat_str).newItem(item_str);
+                        Item &new_item = new_cat.newItem(args["item"].as<std::string>());
                         if (args["entry"].count()) {
                             std::string entry_input = args["entry"].as<std::string>();
                             std::string entry_delimiter = ",";
@@ -68,13 +66,9 @@ int App::run(int argc, char *argv[]) {
                             if (entry_input.find(entry_delimiter) != std::string::npos) {
                                 std::string entry_identifier = entry_input.substr(0, entry_input.find(entry_delimiter));
                                 std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1);
-                                wObj.getCategory(cat_str)
-                                .getItem(item_str)
-                                .addEntry(entry_identifier, entry_value);
+                                new_item.addEntry(entry_identifier, entry_value);
                             } else {
-                                wObj.getCategory(cat_str)
-                                        .getItem(item_str)
-                                        .addEntry(entry_input, "");
+                               new_item.addEntry(entry_input, "");
                             }
                         }
                     } else if (args["entry"].count()) {
