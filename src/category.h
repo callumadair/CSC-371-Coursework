@@ -27,9 +27,9 @@ public:
 
     std::string getIdent();
 
-    void setIdent(std::string identifier);
+    void setIdent(const std::string& new_identifier);
 
-    Item& newItem(const std::string item_identifier);
+    Item& newItem(const std::string& item_identifier);
 
     bool addItem(Item item);
 
