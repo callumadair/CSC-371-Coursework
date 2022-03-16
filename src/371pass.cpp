@@ -87,11 +87,11 @@ int App::run(int argc, char *argv[]) {
 
             case Action::READ:
                 if (args["category"].count()) {
+                    Category &cur_cat = wObj.getCategory(args["category"].as<std::string>());
                     if (args["item"].count()) {
+                        Item &cur_item = cur_cat.getItem(args["item"].as<std::string>());
                         if (args["entry"].count()) {
-                            std::string value = wObj.getCategory(args["category"].as<std::string>())
-                                    .getItem(args["item"].as<std::string>())
-                                    .getEntry(args["entry"].as<std::string>());
+                            std::string value = cur_item.getEntry(args["entry"].as<std::string>());
                             std::cout << value;
                         } else {
                             std::cout << getJSON(wObj, args["category"].as<std::string>(),
