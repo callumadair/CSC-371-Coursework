@@ -8,13 +8,14 @@
 // -----------------------------------------------------
 
 #include <sstream>
+#include <utility>
 #include "category.h"
 
 
 /* Example:
   Category c{"categoryIdent"};*/
 
-Category::Category(std::string identifier) : identifier(identifier) {}
+Category::Category(std::string identifier) : identifier(std::move(identifier)) {}
 
 unsigned int Category::size() {
     return items.size();
@@ -36,15 +37,15 @@ std::string Category::getIdent() {
  Category cObj{"categoryIdent"};
  cObj.setIdent("categoryIdent2");*/
 
-void Category::setIdent(const std::string identifier) {
-    this->identifier = identifier;
+void Category::setIdent(const std::string &new_identifier) {
+    this->identifier = new_identifier;
 }
 
 /* Example:
   Category cObj{"categoryIdent"};
   cObj.newItem("itemIdent");*/
 
-Item& Category::newItem(const std::string item_identifier) {
+Item &Category::newItem(const std::string &item_identifier) {
     auto search = items.find(item_identifier);
     if (search == items.end()) {
         auto *new_item = new Item(item_identifier);
@@ -56,9 +57,8 @@ Item& Category::newItem(const std::string item_identifier) {
 
         Item &ref = *new_item;
         return ref;
-    } else {
-        return items.find(item_identifier)->second;
     }
+    return items.find(item_identifier)->second;
 }
 
 /* Example:
@@ -76,10 +76,9 @@ bool Category::addItem(Item item) {
         }
 
         return true;
-    } else {
-        items.find(item.getIdent())->second.mergeEntries(item);
-        return false;
     }
+    items.find(item.getIdent())->second.mergeEntries(item);
+    return false;
 }
 
 void Category::mergeItems(Category other) {
@@ -95,14 +94,13 @@ void Category::mergeItems(Category other) {
   cObj.newItem("itemIdent");
   auto iObj = cObj.getItem("itemIdent");*/
 
-Item &Category::getItem(const std::string& item_identifier) {
+Item &Category::getItem(const std::string &item_identifier) {
     auto search = items.find(item_identifier);
     if (search != items.end()) {
         Item &ref = search->second;
         return ref;
-    } else {
-        throw std::out_of_range("Error: invalid item argument(s).");
     }
+    throw std::out_of_range("Error: invalid item argument(s).");
 }
 
 /* Example:
@@ -110,11 +108,11 @@ Item &Category::getItem(const std::string& item_identifier) {
   cObj.newItem("itemIdent");
   bool result = cObj.deleteItem("itemIdent");*/
 
-bool Category::deleteItem(const std::string& item_identifier) {
+bool Category::deleteItem(const std::string &item_identifier) {
     auto search = items.find(item_identifier);
     if (search != items.end()) {
         items.erase(item_identifier);
-        if(items.find(item_identifier) == items.end()) return true;
+        if (items.find(item_identifier) == items.end()) return true;
     }
     throw std::out_of_range("Error: invalid item argument(s).");
 }
@@ -138,7 +136,7 @@ bool operator==(const Category &lhs, const Category &rhs) {
   std::string s = cObj.str();*/
 std::string Category::str() const {
     nlohmann::json j;
-    for (const auto & item : items) {
+    for (const auto &item: items) {
         j[item.first] = nlohmann::json::parse(item.second.str());
     }
     return j.dump();

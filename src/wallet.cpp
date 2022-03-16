@@ -9,14 +9,13 @@
 
 #include <fstream>
 #include <iostream>
-#include <sstream>
 #include "lib_json.hpp"
 #include "wallet.h"
 
 /* Example:
   Wallet wObj{};*/
 
-Wallet::Wallet() {}
+Wallet::Wallet() = default;
 
 /* Example:
   Wallet wObj{};
@@ -38,7 +37,7 @@ bool Wallet::empty() {
   Wallet wObj{};
   wObj.newCategory("categoryIdent");*/
 
-Category &Wallet::newCategory(std::string category_identifier) {
+Category &Wallet::newCategory(const std::string& category_identifier) {
     auto search = categories.find(category_identifier);
     if (search == categories.end()) {
         auto *new_category = new Category(category_identifier);
@@ -144,7 +143,7 @@ bool Wallet::deleteCategory(const std::string &category_identifier) {
   library that you must use for your coursework. Read up on how to use it
   here: https://github.com/nlohmann/json. You may not use any other external
   library other than the one I have provided. You may choose to process the
-  JSON yourself without the help of the library but I guarantee this will be
+  JSON yourself without the help of the library, but I guarantee this will be
   more work.
 
   Understanding how to use external libraries is part of this coursework! You

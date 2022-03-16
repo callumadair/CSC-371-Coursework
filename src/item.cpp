@@ -8,11 +8,12 @@
 // -----------------------------------------------------
 
 #include <sstream>
+#include <utility>
 #include "item.h"
 
 /* Example:
   Item iObj{"identIdent"};*/
-Item::Item(const std::string identifier) : identifier(identifier) {}
+Item::Item(std::string identifier) : identifier(std::move(identifier)) {}
 
 unsigned int Item::size() {
     return entries.size();
@@ -33,22 +34,21 @@ std::string Item::getIdent() {
 /* Example:
   Item iObj{"identIdent"};
   iObj.setIdent("identIdent2");*/
-void Item::setIdent(const std::string identifier) {
-    this->identifier = identifier;
+void Item::setIdent(const std::string &new_identifier) {
+    this->identifier = new_identifier;
 }
 
 /* Example:
   Item iObj{"identIdent"};
   iObj.addEntry("key", "value");*/
-bool Item::addEntry(const std::string key, const std::string value) {
+bool Item::addEntry(const std::string &key, const std::string &value) {
     auto search = entries.find(key);
     if (search != entries.end()) {
         entries.insert(std::make_pair(key, value));
         return false;
-    } else {
-        entries.insert(std::make_pair(key, value));
-        return true;
     }
+    entries.insert(std::make_pair(key, value));
+    return true;
 }
 
 void Item::mergeEntries(Item &other) {
@@ -59,20 +59,19 @@ void Item::mergeEntries(Item &other) {
   Item iObj{"identIdent"};
   iObj.addEntry("key", "value");
   auto value = iObj.getEntry("key");*/
-std::string Item::getEntry(const std::string& key) {
+std::string Item::getEntry(const std::string &key) {
     auto search = entries.find(key);
     if (search != entries.end()) {
         return search->second;
-    } else {
-        throw std::out_of_range("Error: invalid entry argument(s).");
     }
+    throw std::out_of_range("Error: invalid entry argument(s).");
 }
 
 /* Example:
   Item iObj{"identIdent"};
   iObj.addEntry("key", "value");
   iObj.deleteEntry("key");*/
-bool Item::deleteEntry(const std::string key) {
+bool Item::deleteEntry(const std::string &key) {
     auto search = entries.find(key);
     if (search != entries.end()) {
         entries.erase(key);
@@ -100,7 +99,7 @@ bool operator==(const Item &lhs, const Item &rhs) {
   std::string s = iObj.str();*/
 std::string Item::str() const {
     nlohmann::json j;
-    for (const auto & entry : entries) {
+    for (const auto &entry: entries) {
         j[entry.first] = entry.second;
 
     }
