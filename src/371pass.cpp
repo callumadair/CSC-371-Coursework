@@ -68,13 +68,15 @@ int App::run(int argc, char *argv[]) {
                                 std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1);
                                 new_item.addEntry(entry_identifier, entry_value);
                             } else {
-                               new_item.addEntry(entry_input, "");
+                                new_item.addEntry(entry_input, "");
                             }
                         }
+                        new_cat.addItem(new_item);
                     } else if (args["entry"].count()) {
                         throw std::out_of_range("Error: missing item argument(s).");
 
                     }
+                    wObj.addCategory(new_cat);
                 } else if (args["item"].count() || args["entry"].count()) {
                     throw std::out_of_range("Error: missing category argument(s).");
 
