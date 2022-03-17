@@ -23,7 +23,7 @@ class Item {
     std::string identifier;
     std::map<std::string, std::string> entries;
 public:
-    Item(std::string  identifier);
+    explicit Item(std::string identifier);
 
     unsigned int size();
 
@@ -31,15 +31,15 @@ public:
 
     std::string getIdent();
 
-    void setIdent(const std::string& new_identifier);
+    void setIdent(const std::string &new_identifier);
 
-    bool addEntry(const std::string& key, const std::string& value);
+    bool addEntry(const std::string &key, const std::string &value);
 
     void mergeEntries(Item &other);
 
-    std::string getEntry(const std::string& key);
+    std::string getEntry(const std::string &key);
 
-    bool deleteEntry(const std::string& key);
+    bool deleteEntry(const std::string &key);
 
     friend bool operator==(const Item &lhs, const Item &rhs);
 

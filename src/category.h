@@ -19,7 +19,7 @@ class Category {
     std::string identifier;
     std::map<std::string, Item> items;
 public:
-    Category(const std::string identifier);
+    explicit Category(std::string identifier);
 
     unsigned int size();
 
