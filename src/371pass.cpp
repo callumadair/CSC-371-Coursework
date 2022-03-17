@@ -86,12 +86,11 @@ int App::run(int argc, char *argv[]) {
 
             case Action::READ:
                 if (args["category"].count()) {
-                    Category &cur_cat = wObj.getCategory(args["category"].as<std::string>());
                     if (args["item"].count()) {
-                        Item &cur_item = cur_cat.getItem(args["item"].as<std::string>());
                         if (args["entry"].count()) {
-                            std::string value = cur_item.getEntry(args["entry"].as<std::string>());
-                            std::cout << value;
+                            std::cout << getJSON(wObj, args["category"].as<std::string>(),
+                                                 args["item"].as<std::string>(),
+                                                 args["entry"].as<std::string>());;
                         } else {
                             std::cout << getJSON(wObj, args["category"].as<std::string>(),
                                                  args["item"].as<std::string>());
