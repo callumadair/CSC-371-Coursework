@@ -75,12 +75,10 @@ int App::run(int argc, char *argv[]) {
                         new_cat.addItem(new_item);
                     } else if (args["entry"].count()) {
                         throw std::out_of_range("Error: missing item argument(s).");
-
                     }
                     wObj.addCategory(new_cat);
                 } else if (args["item"].count() || args["entry"].count()) {
                     throw std::out_of_range("Error: missing category argument(s).");
-
                 } else {
                     throw std::out_of_range("Error: missing category, item or entry argument(s).");
                 }
@@ -158,7 +156,6 @@ int App::run(int argc, char *argv[]) {
                             }
 
                         }
-
                         if (item_input.find(key_delimiter) != std::string::npos) {
                             std::string new_entry_ident =
                                     item_input.substr(item_input.find(key_delimiter) + 1);
@@ -168,12 +165,11 @@ int App::run(int argc, char *argv[]) {
                             cur_cat.addItem(cur_item);
                             cur_cat.deleteItem(cur_item_ident);
 
-                        } else if(!args["entry"].count()) {
+                        } else if (!args["entry"].count()) {
                             throw std::invalid_argument("item");
                         }
 
                     }
-
                     if (cat_input.find(key_delimiter) != std::string::npos) {
                         std::string new_cat_ident =
                                 cat_input.substr(cat_input.find(key_delimiter) + 1);
@@ -183,16 +179,13 @@ int App::run(int argc, char *argv[]) {
                         wObj.addCategory(cur_cat);
                         wObj.deleteCategory(cur_cat_ident);
 
-                    } else if(!args["item"].count()){
+                    } else if (!args["item"].count()) {
                         throw std::invalid_argument("category");
                     }
-
                 } else if (args["item"].count() || args["entry"].count()) {
                     throw std::out_of_range("Error: missing category argument(s).");
-
                 } else {
                     throw std::out_of_range("Error: missing category, item or entry argument(s).");
-
                 }
                 break;
 
