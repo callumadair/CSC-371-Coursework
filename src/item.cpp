@@ -52,7 +52,8 @@ bool Item::addEntry(const std::string &key, const std::string &value) {
 }
 
 void Item::mergeEntries(Item &other) {
-    entries.insert(other.entries.begin(), other.entries.end());
+    other.entries.insert(entries.begin(), entries.end());
+    std::swap(entries, other.entries);
 }
 
 /* Example:
