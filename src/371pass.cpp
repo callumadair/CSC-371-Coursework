@@ -90,7 +90,7 @@ int App::run(int argc, char *argv[]) {
                         if (args["entry"].count()) {
                             std::cout << getJSON(wObj, args["category"].as<std::string>(),
                                                  args["item"].as<std::string>(),
-                                                 args["entry"].as<std::string>());;
+                                                 args["entry"].as<std::string>());
                         } else {
                             std::cout << getJSON(wObj, args["category"].as<std::string>(),
                                                  args["item"].as<std::string>());
