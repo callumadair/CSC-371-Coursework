@@ -51,6 +51,7 @@ int App::run(int argc, char *argv[]) {
     wObj.load(db);
 
 
+    // Check if a valid action argument is passed and try to perform the action.
     try {
         const Action a = parseActionArgument(args);
         switch (a) {
