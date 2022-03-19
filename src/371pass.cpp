@@ -16,16 +16,7 @@
 #include "lib_cxxopts.hpp"
 #include "wallet.h"
 
-// TODO Complete this function. You have been provided some skeleton code which
-//  retrieves the database file name from cxxopts.
-//  1. Load the database file by calling load() on a Wallet object
-//  2. Parse the 'action' argument to decide what action should be taken (
-//     create, read, update, or delete). Read is the easiest to implement, and
-//     update is the hardest. The details of how these arguments work is in the
-//     coursework specification.
-//  4. Save the updated Wallet object to the JSON file if there have been
-//     changes (calling save() on the Wallet object).
-//
+
 /* Some commented out code has been provided. Using some of this will be
  demonstrated in the coursework video on Canvas. Remember, this coursework is
  meant to be challenging and testing your understanding of programming in C++.

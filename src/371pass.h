@@ -20,7 +20,6 @@
 
 namespace App {
 
-// TODO: Enter your student number here! - DONE!
     const std::string STUDENT_NUMBER = "851784";
 
 // Enums (short for enumerations) are similar to their Java implementation.
