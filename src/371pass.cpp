@@ -153,8 +153,6 @@ int App::run(int argc, char *argv[]) {
                             cur_cat.addItem(cur_item);
                             cur_cat.deleteItem(cur_item_ident);
 
-                        } else {
-                            throw std::invalid_argument("item");
                         }
 
                     } else if (args["entry"].count()) {
@@ -169,8 +167,6 @@ int App::run(int argc, char *argv[]) {
                         wObj.addCategory(cur_cat);
                         wObj.deleteCategory(cur_cat_ident);
 
-                    } else {
-                        throw std::invalid_argument("category");
                     }
                 } else if (args["item"].count() || args["entry"].count()) {
                     throw std::out_of_range("Error: missing category argument(s).");
