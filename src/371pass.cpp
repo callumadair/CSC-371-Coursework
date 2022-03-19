@@ -47,19 +47,19 @@ int App::run(int argc, char *argv[]) {
         const Action a = parseActionArgument(args);
         switch (a) {
             case Action::CREATE:
-                executeCreate(args, wObj);
+                executeCreateAction(args, wObj);
                 break;
 
             case Action::READ:
-                executeRead(args, wObj);
+                executeReadAction(args, wObj);
                 break;
 
             case Action::UPDATE:
-                executeUpdate(args, wObj);
+                executeUpdateAction(args, wObj);
                 break;
 
             case Action::DELETE:
-                executeDelete(args, wObj);
+                executeDeleteAction(args, wObj);
                 break;
 
             default:
@@ -78,7 +78,7 @@ int App::run(int argc, char *argv[]) {
     return 0;
 }
 
-void App::executeCreate(const cxxopts::ParseResult &args, Wallet &wObj) {
+void App::executeCreateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     if (args["category"].count()) {
         Category &new_cat = wObj.newCategory(args["category"].as<std::string>());
         if (args["item"].count()) {
@@ -105,7 +105,7 @@ void App::executeCreate(const cxxopts::ParseResult &args, Wallet &wObj) {
     }
 }
 
-void App::executeRead(const cxxopts::ParseResult &args, Wallet &wObj) {
+void App::executeReadAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     if (args["category"].count()) {
         if (args["item"].count()) {
             if (args["entry"].count()) {
@@ -128,7 +128,7 @@ void App::executeRead(const cxxopts::ParseResult &args, Wallet &wObj) {
     }
 }
 
-void App::executeUpdate(const cxxopts::ParseResult &args, Wallet &wObj) {
+void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     if (args["category"].count()) {
         std::string key_delimiter = ":";
         std::string cat_input = args["category"].as<std::string>();
@@ -206,7 +206,7 @@ void App::executeUpdate(const cxxopts::ParseResult &args, Wallet &wObj) {
     }
 }
 
-void App::executeDelete(const cxxopts::ParseResult &args, Wallet &wObj) {
+void App::executeDeleteAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     if (args["category"].count()) {
         std::string cat_str = args["category"].as<std::string>();
         if (args["item"].count()) {
