@@ -275,18 +275,13 @@ App::Action App::parseActionArgument(cxxopts::ParseResult &args) {
     std::string input = args["action"].as<std::string>();
     std::transform(input.begin(), input.end(), input.begin(), ::toupper);
 
-    if (input == "CREATE") {
-        return Action::CREATE;
-    }
-    if (input == "READ") {
-        return Action::READ;
-    }
-    if (input == "UPDATE") {
-        return Action::UPDATE;
-    }
-    if (input == "DELETE") {
-        return Action::DELETE;
-    }
+    if (input == "CREATE") return Action::CREATE;
+
+    if (input == "READ") return Action::READ;
+
+    if (input == "UPDATE") return Action::UPDATE;
+
+    if (input == "DELETE") return Action::DELETE;
     throw std::invalid_argument("action");
 }
 
