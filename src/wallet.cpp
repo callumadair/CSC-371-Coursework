@@ -9,6 +9,7 @@
 
 #include <fstream>
 #include <iostream>
+
 #include "wallet.h"
 #include "lib_json.hpp"
 
