@@ -37,21 +37,18 @@ bool Wallet::empty() {
   Wallet wObj{};
   wObj.newCategory("categoryIdent");*/
 
-Category &Wallet::newCategory(const std::string& category_identifier) {
+Category &Wallet::newCategory(const std::string &category_identifier) {
     auto search = categories.find(category_identifier);
     if (search == categories.end()) {
-        auto *new_category = new Category(category_identifier);
-        categories.insert(std::make_pair(category_identifier, *new_category));
+        Category new_category(category_identifier);
+        categories.insert(std::make_pair(category_identifier, new_category));
 
         if (categories.find(category_identifier) == categories.end()) {
             throw std::runtime_error("Category was not inserted successfully.");
         }
-
-        Category &ref = *new_category;
-        return ref;
-    } else {
-        return categories.find(category_identifier)->second;
     }
+    Category &ref = categories.find(category_identifier)->second;
+    return ref;
 }
 
 /* Example:
@@ -69,10 +66,9 @@ bool Wallet::addCategory(Category category) {
         }
 
         return true;
-    } else {
-        categories.find(category.getIdent())->second.mergeItems(category);
-        return false;
     }
+    categories.find(category.getIdent())->second.mergeItems(category);
+    return false;
 }
 
 /* Example:
@@ -85,9 +81,8 @@ Category &Wallet::getCategory(const std::string &category_identifier) {
     if (search != categories.end()) {
         Category &ref = search->second;
         return ref;
-    } else {
-        throw std::out_of_range("Error: invalid category argument(s).");
     }
+        throw std::out_of_range("Error: invalid category argument(s).");
 }
 
 

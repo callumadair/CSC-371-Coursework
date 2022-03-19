@@ -48,17 +48,15 @@ void Category::setIdent(const std::string &new_identifier) {
 Item &Category::newItem(const std::string &item_identifier) {
     auto search = items.find(item_identifier);
     if (search == items.end()) {
-        auto *new_item = new Item(item_identifier);
-        items.insert(std::make_pair(item_identifier, *new_item));
+        Item new_item(item_identifier);
+        items.insert(std::make_pair(item_identifier, new_item));
 
         if (items.find(item_identifier) == items.end()) {
             throw std::runtime_error("Item was not inserted successfully.");
         }
-
-        Item &ref = *new_item;
-        return ref;
     }
-    return items.find(item_identifier)->second;
+    Item &ref = items.find(item_identifier)->second;
+    return ref;
 }
 
 /* Example:
