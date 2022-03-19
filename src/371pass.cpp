@@ -47,153 +47,19 @@ int App::run(int argc, char *argv[]) {
         const Action a = parseActionArgument(args);
         switch (a) {
             case Action::CREATE:
-                if (args["category"].count()) {
-                    Category &new_cat = wObj.newCategory(args["category"].as<std::string>());
-                    if (args["item"].count()) {
-                        Item &new_item = new_cat.newItem(args["item"].as<std::string>());
-                        if (args["entry"].count()) {
-                            std::string entry_input = args["entry"].as<std::string>();
-                            std::string entry_delimiter = ",";
-
-                            if (entry_input.find(entry_delimiter) != std::string::npos) {
-                                std::string entry_identifier = entry_input.substr(0, entry_input.find(entry_delimiter));
-                                std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1);
-                                new_item.addEntry(entry_identifier, entry_value);
-                            } else {
-                                new_item.addEntry(entry_input, "");
-                            }
-                        }
-                    } else if (args["entry"].count()) {
-                        throw std::out_of_range("Error: missing item argument(s).");
-                    }
-                } else if (args["item"].count() || args["entry"].count()) {
-                    throw std::out_of_range("Error: missing category argument(s).");
-                } else {
-                    throw std::out_of_range("Error: missing category, item or entry argument(s).");
-                }
+                executeCreate(args, wObj);
                 break;
 
             case Action::READ:
-                if (args["category"].count()) {
-                    if (args["item"].count()) {
-                        if (args["entry"].count()) {
-                            std::cout << getJSON(wObj, args["category"].as<std::string>(),
-                                                 args["item"].as<std::string>(),
-                                                 args["entry"].as<std::string>());
-                        } else {
-                            std::cout << getJSON(wObj, args["category"].as<std::string>(),
-                                                 args["item"].as<std::string>());
-                        }
-                    } else if (args["entry"].count()) {
-                        throw std::out_of_range("Error: missing item argument(s).");
-                    } else {
-                        std::cout << getJSON(wObj, args["category"].as<std::string>());
-                    }
-                } else if (args["item"].count() || args["entry"].count()) {
-                    throw std::out_of_range("Error: missing category argument(s).");
-                } else {
-                    std::cout << getJSON(wObj);
-                }
+                executeRead(args, wObj);
                 break;
 
-                //Edit for working according to josh codd's question on canvas
             case Action::UPDATE:
-                if (args["category"].count()) {
-                    std::string key_delimiter = ":";
-                    std::string cat_input = args["category"].as<std::string>();
-                    std::string cur_cat_ident = cat_input.find(key_delimiter) == std::string::npos
-                                                ? cat_input : cat_input.substr(0, cat_input.find(key_delimiter));
-
-                    if (args["item"].count()) {
-                        Category &cur_cat = wObj.getCategory(cur_cat_ident);
-                        std::string item_input = args["item"].as<std::string>();
-                        std::string cur_item_ident = item_input.find(key_delimiter) == std::string::npos
-                                                     ? item_input : item_input.substr(0,
-                                                                                      item_input.find(key_delimiter));
-
-                        if (args["entry"].count()) {
-                            Item &cur_item = cur_cat.getItem(cur_item_ident);
-                            std::string entry_input = args["entry"].as<std::string>();
-                            std::string value_delimiter = ",";
-
-                            if (entry_input.find(key_delimiter) != std::string::npos) {
-                                std::string old_entry_ident =
-                                        entry_input.substr(0, entry_input.length() - entry_input.find(key_delimiter));
-                                std::string new_entry_ident =
-                                        entry_input.substr(entry_input.find(key_delimiter) + 1);
-
-                                if (new_entry_ident.empty()) {
-                                    throw std::invalid_argument("entry");
-                                }
-
-                                std::string entry_val = cur_item.getEntry(old_entry_ident);
-
-                                cur_item.addEntry(new_entry_ident, entry_val);
-                                cur_item.deleteEntry(old_entry_ident);
-
-                            } else if (entry_input.find(value_delimiter) != std::string::npos) {
-                                std::string entry_identifier =
-                                        entry_input.substr(0, entry_input.find(value_delimiter));
-                                std::string new_entry_val =
-                                        entry_input.substr(entry_input.find(value_delimiter) + 1);
-
-                                cur_item.deleteEntry(entry_identifier);
-                                cur_item.addEntry(entry_identifier, new_entry_val);
-                            } else {
-                                throw std::invalid_argument("entry");
-                            }
-
-                        }
-                        if (item_input.find(key_delimiter) != std::string::npos) {
-                            std::string new_entry_ident =
-                                    item_input.substr(item_input.find(key_delimiter) + 1);
-                            Item &cur_item = cur_cat.getItem(cur_item_ident);
-                            cur_item.setIdent(new_entry_ident);
-
-                            cur_cat.addItem(cur_item);
-                            cur_cat.deleteItem(cur_item_ident);
-
-                        }
-
-                    } else if (args["entry"].count()) {
-                        throw std::out_of_range("Error: missing item argument(s).");
-                    }
-                    if (cat_input.find(key_delimiter) != std::string::npos) {
-                        std::string new_cat_ident =
-                                cat_input.substr(cat_input.find(key_delimiter) + 1);
-                        Category &cur_cat = wObj.getCategory(cur_cat_ident);
-                        cur_cat.setIdent(new_cat_ident);
-
-                        wObj.addCategory(cur_cat);
-                        wObj.deleteCategory(cur_cat_ident);
-
-                    }
-                } else if (args["item"].count() || args["entry"].count()) {
-                    throw std::out_of_range("Error: missing category argument(s).");
-                } else {
-                    throw std::out_of_range("Error: missing category, item or entry argument(s).");
-                }
+                executeUpdate(args, wObj);
                 break;
 
             case Action::DELETE:
-                if (args["category"].count()) {
-                    std::string cat_str = args["category"].as<std::string>();
-                    if (args["item"].count()) {
-                        std::string item_str = args["item"].as<std::string>();
-                        if (args["entry"].count()) {
-                            wObj.getCategory(cat_str).getItem(item_str).deleteEntry(
-                                    args["entry"].as<std::string>());
-                        } else {
-                            wObj.getCategory(cat_str).deleteItem(item_str);
-                        }
-                    } else if (args["entry"].count()) {
-                        throw std::out_of_range("Error: missing item argument(s).");
-                    } else {
-                        wObj.deleteCategory(args["category"].as<std::string>());
-                    }
-                } else {
-                    throw std::out_of_range("Error: missing category, item or entry argument(s).");
-                }
+                executeDelete(args, wObj);
                 break;
 
             default:
@@ -210,6 +76,155 @@ int App::run(int argc, char *argv[]) {
         return 1;
     }
     return 0;
+}
+
+void App::executeCreate(const cxxopts::ParseResult &args, Wallet &wObj) {
+    if (args["category"].count()) {
+        Category &new_cat = wObj.newCategory(args["category"].as<std::string>());
+        if (args["item"].count()) {
+            Item &new_item = new_cat.newItem(args["item"].as<std::string>());
+            if (args["entry"].count()) {
+                std::string entry_input = args["entry"].as<std::string>();
+                std::string entry_delimiter = ",";
+
+                if (entry_input.find(entry_delimiter) != std::string::npos) {
+                    std::string entry_identifier = entry_input.substr(0, entry_input.find(entry_delimiter));
+                    std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1);
+                    new_item.addEntry(entry_identifier, entry_value);
+                } else {
+                    new_item.addEntry(entry_input, "");
+                }
+            }
+        } else if (args["entry"].count()) {
+            throw std::out_of_range("Error: missing item argument(s).");
+        }
+    } else if (args["item"].count() || args["entry"].count()) {
+        throw std::out_of_range("Error: missing category argument(s).");
+    } else {
+        throw std::out_of_range("Error: missing category, item or entry argument(s).");
+    }
+}
+
+void App::executeRead(const cxxopts::ParseResult &args, Wallet &wObj) {
+    if (args["category"].count()) {
+        if (args["item"].count()) {
+            if (args["entry"].count()) {
+                std::cout << getJSON(wObj, args["category"].as<std::string>(),
+                                     args["item"].as<std::string>(),
+                                     args["entry"].as<std::string>());
+            } else {
+                std::cout << getJSON(wObj, args["category"].as<std::string>(),
+                                     args["item"].as<std::string>());
+            }
+        } else if (args["entry"].count()) {
+            throw std::out_of_range("Error: missing item argument(s).");
+        } else {
+            std::cout << getJSON(wObj, args["category"].as<std::string>());
+        }
+    } else if (args["item"].count() || args["entry"].count()) {
+        throw std::out_of_range("Error: missing category argument(s).");
+    } else {
+        std::cout << getJSON(wObj);
+    }
+}
+
+void App::executeUpdate(const cxxopts::ParseResult &args, Wallet &wObj) {
+    if (args["category"].count()) {
+        std::string key_delimiter = ":";
+        std::string cat_input = args["category"].as<std::string>();
+        std::string cur_cat_ident = cat_input.find(key_delimiter) == std::string::npos
+                                    ? cat_input : cat_input.substr(0, cat_input.find(key_delimiter));
+
+        if (args["item"].count()) {
+            Category &cur_cat = wObj.getCategory(cur_cat_ident);
+            std::string item_input = args["item"].as<std::string>();
+            std::string cur_item_ident = item_input.find(key_delimiter) == std::string::npos
+                                         ? item_input : item_input.substr(0,
+                                                                          item_input.find(key_delimiter));
+
+            if (args["entry"].count()) {
+                Item &cur_item = cur_cat.getItem(cur_item_ident);
+                std::string entry_input = args["entry"].as<std::string>();
+                std::string value_delimiter = ",";
+
+                if (entry_input.find(key_delimiter) != std::string::npos) {
+                    std::string old_entry_ident =
+                            entry_input.substr(0, entry_input.length() - entry_input.find(key_delimiter));
+                    std::string new_entry_ident =
+                            entry_input.substr(entry_input.find(key_delimiter) + 1);
+
+                    if (new_entry_ident.empty()) {
+                        throw std::invalid_argument("entry");
+                    }
+
+                    std::string entry_val = cur_item.getEntry(old_entry_ident);
+
+                    cur_item.addEntry(new_entry_ident, entry_val);
+                    cur_item.deleteEntry(old_entry_ident);
+
+                } else if (entry_input.find(value_delimiter) != std::string::npos) {
+                    std::string entry_identifier =
+                            entry_input.substr(0, entry_input.find(value_delimiter));
+                    std::string new_entry_val =
+                            entry_input.substr(entry_input.find(value_delimiter) + 1);
+
+                    cur_item.deleteEntry(entry_identifier);
+                    cur_item.addEntry(entry_identifier, new_entry_val);
+                } else {
+                    throw std::invalid_argument("entry");
+                }
+
+            }
+            if (item_input.find(key_delimiter) != std::string::npos) {
+                std::string new_entry_ident =
+                        item_input.substr(item_input.find(key_delimiter) + 1);
+                Item &cur_item = cur_cat.getItem(cur_item_ident);
+                cur_item.setIdent(new_entry_ident);
+
+                cur_cat.addItem(cur_item);
+                cur_cat.deleteItem(cur_item_ident);
+
+            }
+
+        } else if (args["entry"].count()) {
+            throw std::out_of_range("Error: missing item argument(s).");
+        }
+        if (cat_input.find(key_delimiter) != std::string::npos) {
+            std::string new_cat_ident =
+                    cat_input.substr(cat_input.find(key_delimiter) + 1);
+            Category &cur_cat = wObj.getCategory(cur_cat_ident);
+            cur_cat.setIdent(new_cat_ident);
+
+            wObj.addCategory(cur_cat);
+            wObj.deleteCategory(cur_cat_ident);
+
+        }
+    } else if (args["item"].count() || args["entry"].count()) {
+        throw std::out_of_range("Error: missing category argument(s).");
+    } else {
+        throw std::out_of_range("Error: missing category, item or entry argument(s).");
+    }
+}
+
+void App::executeDelete(const cxxopts::ParseResult &args, Wallet &wObj) {
+    if (args["category"].count()) {
+        std::string cat_str = args["category"].as<std::string>();
+        if (args["item"].count()) {
+            std::string item_str = args["item"].as<std::string>();
+            if (args["entry"].count()) {
+                wObj.getCategory(cat_str).getItem(item_str).deleteEntry(
+                        args["entry"].as<std::string>());
+            } else {
+                wObj.getCategory(cat_str).deleteItem(item_str);
+            }
+        } else if (args["entry"].count()) {
+            throw std::out_of_range("Error: missing item argument(s).");
+        } else {
+            wObj.deleteCategory(args["category"].as<std::string>());
+        }
+    } else {
+        throw std::out_of_range("Error: missing category, item or entry argument(s).");
+    }
 }
 
 /* Create a cxxopts instance. You do not need to modify this function.

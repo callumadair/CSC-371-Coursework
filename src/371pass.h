@@ -58,6 +58,13 @@ namespace App {
     std::string getJSON(Wallet &wObj, const std::string &c, const std::string &i,
                         const std::string &e);
 
+    void executeDelete(const cxxopts::ParseResult &args, Wallet &wObj);
+
+    void executeUpdate(const cxxopts::ParseResult &args, Wallet &wObj);
+
+    void executeRead(const cxxopts::ParseResult &args, Wallet &wObj);
+
+    void executeCreate(const cxxopts::ParseResult &args, Wallet &wObj);
 } // namespace App
 
 #endif // _371PASS_H
