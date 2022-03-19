@@ -10,14 +10,14 @@
 // key/value pairs (e.g., a key might be 'username'
 // and a value would be the username, another might be
 // 'url' and the value is the website address the
-// username is for.
+// username is for).
 // -----------------------------------------------------
 
 #ifndef ITEM_H
 #define ITEM_H
 
 #include <string>
-#include "lib_json.hpp"
+#include <map>
 
 class Item {
     std::string identifier;

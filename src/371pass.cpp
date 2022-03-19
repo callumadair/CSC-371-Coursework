@@ -10,7 +10,6 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
-#include <unordered_map>
 
 #include "371pass.h"
 #include "lib_cxxopts.hpp"

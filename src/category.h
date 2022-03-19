@@ -13,6 +13,8 @@
 #ifndef CATEGORY_H
 #define CATEGORY_H
 
+#include <string>
+#include <map>
 #include "item.h"
 
 class Category {

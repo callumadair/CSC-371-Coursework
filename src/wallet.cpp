@@ -9,8 +9,8 @@
 
 #include <fstream>
 #include <iostream>
-#include "lib_json.hpp"
 #include "wallet.h"
+#include "lib_json.hpp"
 
 /* Example:
   Wallet wObj{};*/

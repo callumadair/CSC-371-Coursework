@@ -14,6 +14,9 @@
 #ifndef WALLET_H
 #define WALLET_H
 
+
+#include <string>
+#include <map>
 #include "category.h"
 
 class Wallet {
