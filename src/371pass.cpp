@@ -212,7 +212,8 @@ int App::run(int argc, char *argv[]) {
             default:
                 throw std::runtime_error("Unknown action not implemented");
         }
-        wObj.save(args["db"].as<std::string>());
+
+        if (a != Action::READ) wObj.save(args["db"].as<std::string>());
 
     } catch (std::invalid_argument &e) {
         std::cerr << "Error: invalid " << e.what() << " argument(s).";
