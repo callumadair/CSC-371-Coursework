@@ -15,7 +15,7 @@
 
 /* Example:
   Wallet wObj{};*/
-
+/* Basic default constructor for the Wallet class.*/
 Wallet::Wallet() = default;
 
 /* Example:
@@ -37,7 +37,9 @@ bool Wallet::empty() {
 /* Example:
   Wallet wObj{};
   wObj.newCategory("categoryIdent");*/
-
+/* Creates a new category object, inserts it into the categories map and returns a reference to that object,
+ * if a category with that identifier already exists the function returns a reference to the existing category
+ * object already held in the wallet.*/
 Category &Wallet::newCategory(const std::string &category_identifier) {
     auto search = categories.find(category_identifier);
     if (search == categories.end()) {
@@ -160,10 +162,8 @@ bool Wallet::deleteCategory(const std::string &category_identifier) {
 bool Wallet::load(const std::string &filename) {
     std::fstream json_file(filename);
     if (json_file.is_open()) {
-        std::string json_str((std::istreambuf_iterator<char>(json_file)),
-                             (std::istreambuf_iterator<char>()));
-
-        auto json_obj = nlohmann::json::parse(json_str);
+        auto json_obj = nlohmann::json::parse(json_file);
+        json_file.close();
 
         for (auto cat_it = json_obj.begin(); cat_it != json_obj.end(); cat_it++) {
             Category new_category(cat_it.key());
@@ -192,7 +192,6 @@ bool Wallet::load(const std::string &filename) {
                 addCategory(new_category);
             }
         }
-        json_file.close();
         return true;
     }
     throw std::runtime_error("Json file did not open successfully");
