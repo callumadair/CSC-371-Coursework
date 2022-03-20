@@ -80,6 +80,8 @@ int App::run(int argc, char *argv[]) {
     return 0;
 }
 
+/* Creates new containers as far as the arguments specify, and adds an entry if correctly specified, if there are
+ * missing required arguments, an applicable out_of_range exception is thrown. */
 void App::executeCreateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     if (args["category"].count()) {
         Category &new_cat = wObj.newCategory(args["category"].as<std::string>());
@@ -107,6 +109,8 @@ void App::executeCreateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     }
 }
 
+/* Prints to the standard output either the correctly specified container in JSON format or the value of the correctly
+ * specified entry, if required arguments are missing or incorrect an appropriate exception is thrown. */
 void App::executeReadAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     if (args["category"].count()) {
         if (args["item"].count()) {
@@ -130,6 +134,9 @@ void App::executeReadAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     }
 }
 
+/* Updates the specified container(s) and/or entry, if given the correct arguments at all levels, if an argument is
+ * missing a delimiter, a required argument is missing, or the new identifier is missing an exception is thrown, and
+ * none of the changes will be applied. */
 void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     if (args["category"].count()) {
         std::string key_delimiter = ":";
@@ -141,26 +148,25 @@ void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
             Category &cur_cat = wObj.getCategory(cur_cat_ident);
             std::string item_input = args["item"].as<std::string>();
             std::string cur_item_ident = item_input.find(key_delimiter) == std::string::npos
-                                         ? item_input : item_input.substr(0,
-                                                                          item_input.find(key_delimiter));
+                                         ? item_input : item_input.substr(0, item_input.find(key_delimiter));
 
             if (args["entry"].count()) {
                 Item &cur_item = cur_cat.getItem(cur_item_ident);
                 std::string entry_input = args["entry"].as<std::string>();
                 std::string value_delimiter = ",";
 
+                /* Checks if either the key or value delimiters are present in the entry string, performing the correct
+                update depending on the delimiter and throws an invalid_argument exception if neither is present. */
                 if (entry_input.find(key_delimiter) != std::string::npos) {
-                    std::string old_entry_ident =
-                            entry_input.substr(0, entry_input.length() - entry_input.find(key_delimiter));
-                    std::string new_entry_ident =
-                            entry_input.substr(entry_input.find(key_delimiter) + 1);
+                    std::string old_entry_ident = entry_input.substr(0, entry_input.length() -
+                                                                        entry_input.find(key_delimiter));
+                    std::string new_entry_ident = entry_input.substr(entry_input.find(key_delimiter) + 1);
 
                     if (new_entry_ident.empty()) {
                         throw std::invalid_argument("entry");
                     }
 
                     std::string entry_val = cur_item.getEntry(old_entry_ident);
-
                     cur_item.addEntry(new_entry_ident, entry_val);
                     cur_item.deleteEntry(old_entry_ident);
 
@@ -178,23 +184,28 @@ void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
 
             }
             if (item_input.find(key_delimiter) != std::string::npos) {
-                std::string new_entry_ident =
-                        item_input.substr(item_input.find(key_delimiter) + 1);
+                std::string new_item_ident = item_input.substr(item_input.find(key_delimiter) + 1);
                 Item &cur_item = cur_cat.getItem(cur_item_ident);
-                cur_item.setIdent(new_entry_ident);
+
+                if (new_item_ident.empty()) {
+                    throw std::invalid_argument("entry");
+                }
+                cur_item.setIdent(new_item_ident);
 
                 cur_cat.addItem(cur_item);
                 cur_cat.deleteItem(cur_item_ident);
-
             }
 
         } else if (args["entry"].count()) {
             throw std::out_of_range("Error: missing item argument(s).");
         }
         if (cat_input.find(key_delimiter) != std::string::npos) {
-            std::string new_cat_ident =
-                    cat_input.substr(cat_input.find(key_delimiter) + 1);
+            std::string new_cat_ident = cat_input.substr(cat_input.find(key_delimiter) + 1);
             Category &cur_cat = wObj.getCategory(cur_cat_ident);
+
+            if (new_cat_ident.empty()) {
+                throw std::invalid_argument("entry");
+            }
             cur_cat.setIdent(new_cat_ident);
 
             wObj.addCategory(cur_cat);
@@ -208,14 +219,17 @@ void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     }
 }
 
+/* Deletes the specified container or entry, if in an invalid argument is given or a required argument is missing, an
+ * appropriate exception is thrown and nothing is deleted. */
 void App::executeDeleteAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     if (args["category"].count()) {
         std::string cat_str = args["category"].as<std::string>();
         if (args["item"].count()) {
             std::string item_str = args["item"].as<std::string>();
             if (args["entry"].count()) {
-                wObj.getCategory(cat_str).getItem(item_str).deleteEntry(
-                        args["entry"].as<std::string>());
+                wObj.getCategory(cat_str)
+                        .getItem(item_str)
+                        .deleteEntry(args["entry"].as<std::string>());
             } else {
                 wObj.getCategory(cat_str).deleteItem(item_str);
             }
