@@ -9,10 +9,10 @@ ___
 All required functionality specified in the specification is present and working fully as far as my own and the
 automated tests can show, including functionality mentioned in the coursework discussion question board such as
 favouring the entries held in a new container over the existing container and being able to update multiple containers
-at once (e.g. at the category and item simultaneously).
+at once (e.g. the category and item simultaneously).
 
 All functions are commented above the provided comments (e.g. "my comment" followed by "provided comment"), except those
-that are trivial and the code is self documenting, i.e. the size() and empty() member functions in the container
+that are trivial and the code is self documenting, i.e. the getIdent(), setIdent(), size() and empty() member functions in the container
 classes, and the provided functions are in the same order as provided, but may have some new member functions between
 them, such as in the App namespace where each action has been extracted and placed in order after the run member
 function to improve the readability of the code, or in the container classes where the merge function follows the
