@@ -13,15 +13,14 @@
 #include "wallet.h"
 #include "lib_json.hpp"
 
+/* Basic default constructor for the Wallet class.*/
 /* Example:
   Wallet wObj{};*/
-/* Basic default constructor for the Wallet class.*/
 Wallet::Wallet() = default;
 
 /* Example:
   Wallet wObj{};
   auto size = wObj.size();*/
-
 unsigned int Wallet::size() {
     return categories.size();
 }
@@ -29,17 +28,17 @@ unsigned int Wallet::size() {
 /* Example:
   Wallet wwObj{};
   auto isEmpty = wObj.empty();*/
-
 bool Wallet::empty() {
     return categories.empty();
 }
 
-/* Example:
-  Wallet wObj{};
-  wObj.newCategory("categoryIdent");*/
+
 /* Creates a new category object, inserts it into the categories map and returns a reference to that object,
  * if a category with that identifier already exists the function returns a reference to the existing category
  * object already held in the wallet.*/
+/* Example:
+  Wallet wObj{};
+  wObj.newCategory("categoryIdent");*/
 Category &Wallet::newCategory(const std::string &category_identifier) {
     auto search = categories.find(category_identifier);
     if (search == categories.end()) {
@@ -54,11 +53,12 @@ Category &Wallet::newCategory(const std::string &category_identifier) {
     return ref;
 }
 
+/* Adds a category object to the wallet's map, if the wallet already holds a category with the same identifier, the two
+ * categories will be merged, leaving one category holding all of their items.*/
 /* Example:
   Wallet wObj{};
   Category cObj{"categoryIdent"};
   wObj.addCategory(cObj);*/
-
 bool Wallet::addCategory(Category category) {
     auto search = categories.find(category.getIdent());
     if (search == categories.end()) {
@@ -74,11 +74,12 @@ bool Wallet::addCategory(Category category) {
     return false;
 }
 
+/*Returns a reference to the category with the given identifier, if the category does not exist, throws an out_of_range
+ * exception*/
 /* Example:
  Wallet wObj{};
   wObj.newCategory("categoryIdent");
   auto cObj = wObj.getCategory("categoryIdent");*/
-
 Category &Wallet::getCategory(const std::string &category_identifier) {
     auto search = categories.find(category_identifier);
     if (search != categories.end()) {
@@ -89,21 +90,24 @@ Category &Wallet::getCategory(const std::string &category_identifier) {
 }
 
 
+/*Deletes the category with the provided identifier and returns true if successful, if the category does not exist or
+ * was not deleted, an out_of_range exception is thrown.*/
 /* Example:
   Wallet wObj{};
   wObj.newCategory("categoryIdent");
   wObj.deleteCategory("categoryIdent");*/
-
 bool Wallet::deleteCategory(const std::string &category_identifier) {
     auto search = categories.find(category_identifier);
     if (search != categories.end()) {
         categories.erase(category_identifier);
         if (categories.find(category_identifier) == categories.end()) return true;
     }
-    throw std::out_of_range("No such item found.");
+    throw std::out_of_range("No such category found.");
 }
 
 
+/*Loads a wallet object from a JSON file and returns true if successful, otherwise throws a runtime_error exception if
+ * the file cannot be opened.*/
 /* A note on clashes:
   If you encounter two categories with the same key, the categories should be
   merged (not replaced!). If you encounter two items with the same key in the
@@ -158,7 +162,6 @@ bool Wallet::deleteCategory(const std::string &category_identifier) {
  Example:
   Wallet wObj{};
   wObj.load("database.json");*/
-
 bool Wallet::load(const std::string &filename) {
     std::fstream json_file(filename);
     if (json_file.is_open()) {
@@ -194,15 +197,15 @@ bool Wallet::load(const std::string &filename) {
         }
         return true;
     }
-    throw std::runtime_error("Json file did not open successfully");
+    throw std::runtime_error("Json file: " + filename + ", did not open successfully");
 }
 
+/*Saves the contents of the wallet's categories map as a JSON file.*/
 /* Example:
   Wallet wObj{};
    wObj.load("database.json");
   ...
   wObj.save("database.json");*/
-
 bool Wallet::save(const std::string &filename) const {
     std::fstream json_file(filename, std::fstream::out | std::fstream::trunc);
     if (json_file.is_open()) {
@@ -222,6 +225,7 @@ bool operator==(const Wallet &lhs, const Wallet &rhs) {
     return lhs.categories == rhs.categories;
 }
 
+/*Returns a JSON string representation of the wallet object and the categories it holds.*/
 /* Hint:
   See the coursework specification for how this JSON should look.
 
