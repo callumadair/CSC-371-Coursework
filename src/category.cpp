@@ -11,6 +11,7 @@
 #include "lib_json.hpp"
 
 
+/*Constructs a Category object with the given identifier.*/
 /* Example:
   Category c{"categoryIdent"};*/
 
@@ -40,6 +41,9 @@ void Category::setIdent(const std::string &new_identifier) {
     this->identifier = new_identifier;
 }
 
+/* Creates a new item object, inserts it into the items map and returns a reference to that object,
+ * if an item with that identifier already exists the function returns a reference to the existing item
+ * object already held by the category.*/
 /* Example:
   Category cObj{"categoryIdent"};
   cObj.newItem("itemIdent");*/
@@ -58,6 +62,8 @@ Item &Category::newItem(const std::string &item_identifier) {
     return ref;
 }
 
+/* Adds an item object to the category's map, if the category already contains an item with the same identifier, the
+ * two items will be merged, leaving one item holding all of their entries.*/
 /* Example:
   Category cObj{"categoryIdent"};
   Item iObj{"itemIdent"};
@@ -78,11 +84,16 @@ bool Category::addItem(Item item) {
     return false;
 }
 
+/*Merges the item maps of two categories into one, favouring the other category's items over the existing category's
+ * items.*/
 void Category::mergeItems(Category other) {
-    items.insert(other.items.begin(), other.items.end());
+    other.items.insert(items.begin(), items.end());
+    std::swap(items, other.items);
 }
 
 
+/*Returns a reference to the item with the given identifier, if the item does not exist, throws an out_of_range
+ * exception*/
 /* Hint:
   See the test scripts for the exception expected.
 
@@ -100,6 +111,8 @@ Item &Category::getItem(const std::string &item_identifier) {
     throw std::out_of_range("Error: invalid item argument(s).");
 }
 
+/*Deletes the item with the provided identifier and returns true if successful, if the item does not exist or
+ * was not deleted, an out_of_range exception is thrown.*/
 /* Example:
   Category cObj{"categoryIdent"};
   cObj.newItem("itemIdent");
@@ -125,7 +138,7 @@ bool operator==(const Category &lhs, const Category &rhs) {
     return lhs.identifier == rhs.identifier && lhs.items == rhs.items;
 }
 
-
+/*Returns a JSON string representation of the category object and the items it holds.*/
 /* See the coursework specification for how this JSON should look.
 
  Example:
