@@ -73,6 +73,9 @@ int App::run(int argc, char *argv[]) {
     } catch (std::out_of_range &e) {
         std::cerr << e.what();
         return 1;
+    } catch (std::runtime_error &e) {
+        std::cerr << e.what();
+        return 1;
     }
     return 0;
 }
