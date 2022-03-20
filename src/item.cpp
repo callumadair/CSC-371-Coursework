@@ -12,6 +12,8 @@
 #include "lib_json.hpp"
 #include "item.h"
 
+
+/* Constructs an Item object with the given identifier. */
 /* Example:
   Item iObj{"identIdent"};*/
 Item::Item(std::string identifier) : identifier(std::move(identifier)) {}
@@ -39,6 +41,8 @@ void Item::setIdent(const std::string &new_identifier) {
     this->identifier = new_identifier;
 }
 
+/* Adds a new entry to the entries map, if there is already an entry with the given key, the entry will be overwritten
+ * and the function will return false otherwise the function will return true. */
 /* Example:
   Item iObj{"identIdent"};
   iObj.addEntry("key", "value");*/
@@ -52,11 +56,14 @@ bool Item::addEntry(const std::string &key, const std::string &value) {
     return true;
 }
 
+/* Merges the entries maps of two items into one, favouring the other item's entries over the existing item's
+ * entries. */
 void Item::mergeEntries(Item &other) {
     other.entries.insert(entries.begin(), entries.end());
     std::swap(entries, other.entries);
 }
 
+/* Returns the value of the entry with the given key, if the entry does not exist, throws an out_of_range exception. */
 /* Example:
   Item iObj{"identIdent"};
   iObj.addEntry("key", "value");
@@ -69,6 +76,8 @@ std::string Item::getEntry(const std::string &key) {
     throw std::out_of_range("Error: invalid entry argument(s).");
 }
 
+/* Deletes the entry with the provided key and returns true if successful, if the entry does not exist or
+ * was not deleted, an out_of_range exception is thrown. */
 /* Example:
   Item iObj{"identIdent"};
   iObj.addEntry("key", "value");
@@ -94,6 +103,7 @@ bool operator==(const Item &lhs, const Item &rhs) {
     return lhs.identifier == rhs.identifier && lhs.entries == rhs.entries;
 }
 
+/* Returns a JSON string representation of the item object and the entries it holds. */
 /* See the coursework specification for how this JSON should look.
 
  Example:

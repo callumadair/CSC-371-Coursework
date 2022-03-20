@@ -84,8 +84,8 @@ bool Category::addItem(Item item) {
     return false;
 }
 
-/*Merges the item maps of two categories into one, favouring the other category's items over the existing category's
- * items.*/
+/* Merges the item maps of two categories into one, favouring the other category's items over the existing category's
+ * items. */
 void Category::mergeItems(Category other) {
     other.items.insert(items.begin(), items.end());
     std::swap(items, other.items);
