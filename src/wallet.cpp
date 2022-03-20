@@ -201,7 +201,7 @@ bool Wallet::load(const std::string &filename) {
     throw std::runtime_error("Json file: " + filename + ", did not open successfully");
 }
 
-/* Saves the contents of the wallet's categories map as a JSON file. */
+/* Saves the contents of the wallet's categories map as a JSON file with the specified file name. */
 /* Example:
   Wallet wObj{};
    wObj.load("database.json");
