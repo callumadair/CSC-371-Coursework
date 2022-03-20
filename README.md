@@ -11,7 +11,7 @@ automated tests can show, including functionality mentioned in the coursework di
 favouring the entries held in a new container over the existing container and being able to update multiple containers
 at once (e.g. the category and item simultaneously).
 
-All functions are commented above the provided comments (e.g. "my comment" followed by "provided comment"), except those
+Functions are commented above the provided comments minus the TODOs (e.g. "my comment" followed by "provided comment"), except those
 that are trivial and the code is self documenting, i.e. the getIdent(), setIdent(), size() and empty() member functions in the container
 classes, and the provided functions are in the same order as provided, but may have some new member functions between
 them, such as in the App namespace where each action has been extracted and placed in order after the run member
@@ -20,3 +20,5 @@ addItem and addCategory functions.
 
 All variable names are written in snake_case and all member functions names are written in camelCase to ensure
 consistency with the provided framework.
+
+Thanks for a challenging but well explained coursework.
