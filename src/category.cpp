@@ -147,6 +147,7 @@ bool operator==(const Category &lhs, const Category &rhs) {
 std::string Category::str() const {
     nlohmann::json j;
     for (const auto &item: items) {
+        // Removes the escape characters from the JSON string and saves the item key/value pair.
         j[item.first] = nlohmann::json::parse(item.second.str());
     }
     return j.dump();
