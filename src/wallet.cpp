@@ -13,7 +13,7 @@
 #include "wallet.h"
 #include "lib_json.hpp"
 
-/* Basic default constructor for the Wallet class.*/
+/* Basic default constructor for the Wallet class. */
 /* Example:
   Wallet wObj{};*/
 Wallet::Wallet() = default;
@@ -35,7 +35,7 @@ bool Wallet::empty() {
 
 /* Creates a new category object, inserts it into the categories map and returns a reference to that object,
  * if a category with that identifier already exists the function returns a reference to the existing category
- * object already held in the wallet.*/
+ * object already held in the wallet. */
 /* Example:
   Wallet wObj{};
   wObj.newCategory("categoryIdent");*/
@@ -54,7 +54,7 @@ Category &Wallet::newCategory(const std::string &category_identifier) {
 }
 
 /* Adds a category object to the wallet's map, if the wallet already holds a category with the same identifier, the two
- * categories will be merged, leaving one category holding all of their items.*/
+ * categories will be merged, leaving one category holding all of their items. */
 /* Example:
   Wallet wObj{};
   Category cObj{"categoryIdent"};
@@ -74,8 +74,8 @@ bool Wallet::addCategory(Category category) {
     return false;
 }
 
-/*Returns a reference to the category with the given identifier, if the category does not exist, throws an out_of_range
- * exception*/
+/* Returns a reference to the category with the given identifier, if the category does not exist, throws an out_of_range
+ * exception. */
 /* Example:
  Wallet wObj{};
   wObj.newCategory("categoryIdent");
@@ -90,8 +90,8 @@ Category &Wallet::getCategory(const std::string &category_identifier) {
 }
 
 
-/*Deletes the category with the provided identifier and returns true if successful, if the category does not exist or
- * was not deleted, an out_of_range exception is thrown.*/
+/* Deletes the category with the provided identifier and returns true if successful, if the category does not exist or
+ * was not deleted, an out_of_range exception is thrown. */
 /* Example:
   Wallet wObj{};
   wObj.newCategory("categoryIdent");
@@ -106,8 +106,8 @@ bool Wallet::deleteCategory(const std::string &category_identifier) {
 }
 
 
-/*Loads a wallet object from a JSON file and returns true if successful, otherwise throws a runtime_error exception if
- * the file cannot be opened.*/
+/* Loads a wallet object from a JSON file and returns true if successful, otherwise throws a runtime_error exception if
+ * the file cannot be opened. */
 /* A note on clashes:
   If you encounter two categories with the same key, the categories should be
   merged (not replaced!). If you encounter two items with the same key in the
@@ -200,7 +200,7 @@ bool Wallet::load(const std::string &filename) {
     throw std::runtime_error("Json file: " + filename + ", did not open successfully");
 }
 
-/*Saves the contents of the wallet's categories map as a JSON file.*/
+/* Saves the contents of the wallet's categories map as a JSON file. */
 /* Example:
   Wallet wObj{};
    wObj.load("database.json");
@@ -225,7 +225,7 @@ bool operator==(const Wallet &lhs, const Wallet &rhs) {
     return lhs.categories == rhs.categories;
 }
 
-/*Returns a JSON string representation of the wallet object and the categories it holds.*/
+/* Returns a JSON string representation of the wallet object and the categories it holds. */
 /* Hint:
   See the coursework specification for how this JSON should look.
 
