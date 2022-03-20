@@ -168,6 +168,7 @@ bool Wallet::load(const std::string &filename) {
         auto json_obj = nlohmann::json::parse(json_file);
         json_file.close();
 
+        //Constructs all the sub-containers and checks if the container already exists followed by merge if it does.
         for (auto cat_it = json_obj.begin(); cat_it != json_obj.end(); cat_it++) {
             Category new_category(cat_it.key());
             auto category_items = cat_it.value();
