@@ -157,7 +157,18 @@ void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
 
                 /* Checks if either the key or value delimiters are present in the entry string, performing the correct
                 update depending on the delimiter and throws an invalid_argument exception if neither is present. */
-                if (entry_input.find(key_delimiter) != std::string::npos) {
+                if (entry_input.find(key_delimiter) != std::string::npos
+                    && entry_input.find(value_delimiter) != std::string::npos) {
+                    std::string old_entry_ident = entry_input.substr(0, entry_input.find(key_delimiter));
+                    std::string new_entry_ident = entry_input.substr(entry_input.find(key_delimiter) + 1,
+                                                                     entry_input.find(value_delimiter) -
+                                                                     entry_input.find(key_delimiter) - 1);
+                    std::string new_entry_val = entry_input.substr(entry_input.find(value_delimiter) + 1);
+
+                    cur_item.addEntry(new_entry_ident, new_entry_val);
+                    cur_item.deleteEntry(old_entry_ident);
+
+                } else if (entry_input.find(key_delimiter) != std::string::npos) {
                     std::string old_entry_ident = entry_input.substr(0, entry_input.length() -
                                                                         entry_input.find(key_delimiter));
                     std::string new_entry_ident = entry_input.substr(entry_input.find(key_delimiter) + 1);
