@@ -67,13 +67,13 @@ int App::run(int argc, char *argv[]) {
 
         if (a != Action::READ) wObj.save(args["db"].as<std::string>());
 
-    } catch (std::invalid_argument &e) {
+    } catch (const std::invalid_argument &e) {
         std::cerr << "Error: invalid " << e.what() << " argument(s).";
         return 1;
-    } catch (std::out_of_range &e) {
+    } catch (const std::out_of_range &e) {
         std::cerr << e.what();
         return 1;
-    } catch (std::runtime_error &e) {
+    } catch (const std::runtime_error &e) {
         std::cerr << e.what();
         return 1;
     }
@@ -169,8 +169,7 @@ void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
                     cur_item.deleteEntry(old_entry_ident);
 
                 } else if (entry_input.find(key_delimiter) != std::string::npos) {
-                    std::string old_entry_ident = entry_input.substr(0, entry_input.length() -
-                                                                        entry_input.find(key_delimiter));
+                    std::string old_entry_ident = entry_input.substr(0, entry_input.find(key_delimiter));
                     std::string new_entry_ident = entry_input.substr(entry_input.find(key_delimiter) + 1);
 
                     if (new_entry_ident.empty()) {
