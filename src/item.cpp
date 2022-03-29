@@ -113,7 +113,6 @@ std::string Item::str() const {
     nlohmann::json j;
     for (const auto &entry: entries) {
         j[entry.first] = entry.second;
-
     }
     return j.dump();
 }

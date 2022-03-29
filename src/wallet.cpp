@@ -184,7 +184,7 @@ bool Wallet::load(const std::string &filename) {
                 try {
                     Item &existing_item = new_category.getItem(item_it.key());
                     existing_item.mergeEntries(new_item);
-                } catch (std::out_of_range &e) {
+                } catch (const std::out_of_range &e) {
                     new_category.addItem(new_item);
                 }
             }
@@ -192,7 +192,7 @@ bool Wallet::load(const std::string &filename) {
             try {
                 Category &existing_category = getCategory(cat_it.key());
                 existing_category.mergeItems(new_category);
-            } catch (std::out_of_range &e) {
+            } catch (const std::out_of_range &e) {
                 addCategory(new_category);
             }
         }
@@ -238,7 +238,8 @@ std::string Wallet::str() const {
     nlohmann::json j;
     for ( auto &category: categories) {
         // Removes the escape characters from the JSON string and saves the category key/value pair.
-        j[category.first] = nlohmann::json::parse(category.second.str());
+        auto json_val = nlohmann::json::parse(category.second.str());
+        j[category.first] = json_val.empty() ? nlohmann::json::object() : json_val;
     }
     return j.dump();
 }
