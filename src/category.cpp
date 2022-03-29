@@ -148,7 +148,8 @@ std::string Category::str() const {
     nlohmann::json j;
     for (const auto &item: items) {
         // Removes the escape characters from the JSON string and saves the item key/value pair.
-        j[item.first] = nlohmann::json::parse(item.second.str());
+        auto json_val = nlohmann::json::parse(item.second.str());
+        j[item.first] = json_val.empty() ? nlohmann::json::object() : json_val;
     }
     return j.dump();
 }
