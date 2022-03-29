@@ -17,11 +17,11 @@
 
 Category::Category(std::string identifier) : identifier(std::move(identifier)) {}
 
-unsigned int Category::size() {
+unsigned int Category::size() const {
     return items.size();
 }
 
-bool Category::empty() {
+bool Category::empty() const {
     return items.empty();
 }
 
@@ -29,7 +29,7 @@ bool Category::empty() {
   Category cObj{"categoryIdent"};
   auto ident = cObj.getIdent();*/
 
-std::string Category::getIdent() {
+std::string Category::getIdent() const {
     return identifier;
 }
 

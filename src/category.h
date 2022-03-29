@@ -24,11 +24,11 @@ class Category {
 public:
     explicit Category(std::string identifier);
 
-    unsigned int size();
+    unsigned int size() const;
 
-    bool empty();
+    bool empty() const;
 
-    std::string getIdent();
+    std::string getIdent() const;
 
     void setIdent(const std::string& new_identifier);
 
