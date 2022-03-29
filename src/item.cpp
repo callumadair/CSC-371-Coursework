@@ -18,11 +18,11 @@
   Item iObj{"identIdent"};*/
 Item::Item(std::string identifier) : identifier(std::move(identifier)) {}
 
-unsigned int Item::size() {
+unsigned int Item::size() const {
     return entries.size();
 }
 
-bool Item::empty() {
+bool Item::empty() const {
     return entries.empty();
 }
 
@@ -30,7 +30,7 @@ bool Item::empty() {
 /* Example:
   Item iObj{"identIdent"};
   auto ident = iObj.getIdent();*/
-std::string Item::getIdent() {
+std::string Item::getIdent() const {
     return identifier;
 }
 
@@ -68,7 +68,7 @@ void Item::mergeEntries(Item &other) {
   Item iObj{"identIdent"};
   iObj.addEntry("key", "value");
   auto value = iObj.getEntry("key");*/
-std::string Item::getEntry(const std::string &key) {
+std::string Item::getEntry(const std::string &key) const {
     auto search = entries.find(key);
     if (search != entries.end()) {
         return search->second;

@@ -25,11 +25,11 @@ class Item {
 public:
     explicit Item(std::string identifier);
 
-    unsigned int size();
+    unsigned int size() const;
 
-    bool empty();
+    bool empty() const;
 
-    std::string getIdent();
+    std::string getIdent() const;
 
     void setIdent(const std::string &new_identifier);
 
@@ -37,7 +37,7 @@ public:
 
     void mergeEntries(Item &other);
 
-    std::string getEntry(const std::string &key);
+    std::string getEntry(const std::string &key) const;
 
     bool deleteEntry(const std::string &key);
 
