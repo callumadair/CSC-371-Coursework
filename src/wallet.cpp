@@ -21,14 +21,14 @@ Wallet::Wallet() = default;
 /* Example:
   Wallet wObj{};
   auto size = wObj.size();*/
-unsigned int Wallet::size() {
+unsigned int Wallet::size() const {
     return categories.size();
 }
 
 /* Example:
   Wallet wwObj{};
   auto isEmpty = wObj.empty();*/
-bool Wallet::empty() {
+bool Wallet::empty() const {
     return categories.empty();
 }
 
@@ -236,7 +236,7 @@ bool operator==(const Wallet &lhs, const Wallet &rhs) {
 
 std::string Wallet::str() const {
     nlohmann::json j;
-    for ( auto &category: categories) {
+    for (auto &category: categories) {
         // Removes the escape characters from the JSON string and saves the category key/value pair.
         auto json_val = nlohmann::json::parse(category.second.str());
         j[category.first] = json_val.empty() ? nlohmann::json::object() : json_val;

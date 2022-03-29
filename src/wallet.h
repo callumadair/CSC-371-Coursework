@@ -25,21 +25,21 @@ class Wallet {
 public:
     Wallet();
 
-    unsigned int size();
+    unsigned int size() const;
 
-    bool empty();
+    bool empty() const;
 
-    Category& newCategory(const std::string& category_identifier);
+    Category &newCategory(const std::string &category_identifier);
 
     bool addCategory(Category category);
 
-    Category& getCategory(const std::string& category_identifier);
+    Category &getCategory(const std::string &category_identifier);
 
-    bool deleteCategory(const std::string& category_identifier);
+    bool deleteCategory(const std::string &category_identifier);
 
-    bool load(const std::string& filename);
+    bool load(const std::string &filename);
 
-    bool save(const std::string& filename) const;
+    bool save(const std::string &filename) const;
 
     friend bool operator==(const Wallet &lhs, const Wallet &rhs);
 
