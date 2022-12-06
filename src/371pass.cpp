@@ -250,25 +250,32 @@ void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
 /* Deletes the specified container or entry, if in an invalid argument is given or a required argument is missing, an
  * appropriate exception is thrown and nothing is deleted. */
 void App::executeDeleteAction(const cxxopts::ParseResult &args, Wallet &wObj) {
-    if (args["category"].count()) {
-        std::string cat_str = args["category"].as<std::string>();
-        if (args["item"].count()) {
-            std::string item_str = args["item"].as<std::string>();
-            if (args["entry"].count()) {
-                wObj.getCategory(cat_str)
-                        .getItem(item_str)
-                        .deleteEntry(args["entry"].as<std::string>());
-            } else {
-                wObj.getCategory(cat_str).deleteItem(item_str);
-            }
-        } else if (args["entry"].count()) {
-            throw std::out_of_range("Error: missing item argument(s).");
-        } else {
-            wObj.deleteCategory(args["category"].as<std::string>());
-        }
-    } else {
+    if (!args["category"].count()) {
         throw std::out_of_range("Error: missing category, item or entry argument(s).");
     }
+
+    std::string cat_str = args["category"].as<std::string>();
+
+    if (!args["item"].count() && args["entry"].count()) {
+        throw std::out_of_range("Error: missing item argument(s).");
+    }
+
+    if (!args["item"].count()) {
+        wObj.deleteCategory(args["category"].as<std::string>());
+        return;
+    }
+
+    std::string item_str = args["item"].as<std::string>();
+
+    if (!args["entry"].count()) {
+        wObj.getCategory(cat_str).deleteItem(item_str);
+        return;
+    }
+
+    wObj.getCategory(cat_str)
+            .getItem(item_str)
+            .deleteEntry(args["entry"].as<std::string>());
+
 }
 
 /* Create a cxxopts instance. You do not need to modify this function.
