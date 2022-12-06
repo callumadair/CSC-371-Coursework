@@ -119,26 +119,31 @@ void App::executeCreateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
 /* Prints to the standard output either the correctly specified container in JSON format or the value of the correctly
  * specified entry, if required arguments are missing or incorrect an appropriate exception is thrown. */
 void App::executeReadAction(const cxxopts::ParseResult &args, Wallet &wObj) {
-    if (args["category"].count()) {
-        if (args["item"].count()) {
-            if (args["entry"].count()) {
-                std::cout << getJSON(wObj, args["category"].as<std::string>(),
-                                     args["item"].as<std::string>(),
-                                     args["entry"].as<std::string>());
-            } else {
-                std::cout << getJSON(wObj, args["category"].as<std::string>(),
-                                     args["item"].as<std::string>());
-            }
-        } else if (args["entry"].count()) {
-            throw std::out_of_range("Error: missing item argument(s).");
-        } else {
-            std::cout << getJSON(wObj, args["category"].as<std::string>());
-        }
-    } else if (args["item"].count() || args["entry"].count()) {
+
+
+    if (!args["category"].count() && (args["item"].count() || args["entry"].count())) {
         throw std::out_of_range("Error: missing category argument(s).");
-    } else {
-        std::cout << getJSON(wObj);
     }
+    if (!args["category"].count()) {
+        std::cout << getJSON(wObj);
+        return;
+    }
+
+    if (!args["item"].count() && args["entry"].count()) {
+        throw std::out_of_range("Error: missing item argument(s).");
+    } else if (!args["item"].count()) {
+        std::cout << getJSON(wObj, args["category"].as<std::string>());
+    }
+
+    if (!args["entry"].count()) {
+        std::cout << getJSON(wObj, args["category"].as<std::string>(),
+                             args["item"].as<std::string>());
+    }
+
+    std::cout << getJSON(wObj, args["category"].as<std::string>(),
+                         args["item"].as<std::string>(),
+                         args["entry"].as<std::string>());
+
 }
 
 /* Updates the specified container(s) and/or entry, if given the correct arguments at all levels, if an argument is
