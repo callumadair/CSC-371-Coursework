@@ -83,29 +83,36 @@ int App::run(int argc, char *argv[]) {
 /* Creates new containers as far as the arguments specify, and adds an entry if correctly specified, if there are
  * missing required arguments, an applicable out_of_range exception is thrown. */
 void App::executeCreateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
-    if (args["category"].count()) {
-        Category &new_cat = wObj.newCategory(args["category"].as<std::string>());
-        if (args["item"].count()) {
-            Item &new_item = new_cat.newItem(args["item"].as<std::string>());
-            if (args["entry"].count()) {
-                std::string entry_input = args["entry"].as<std::string>();
-                std::string entry_delimiter = ",";
 
-                if (entry_input.find(entry_delimiter) != std::string::npos) {
-                    std::string entry_identifier = entry_input.substr(0, entry_input.find(entry_delimiter));
-                    std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1);
-                    new_item.addEntry(entry_identifier, entry_value);
-                } else {
-                    new_item.addEntry(entry_input, "");
-                }
-            }
-        } else if (args["entry"].count()) {
-            throw std::out_of_range("Error: missing item argument(s).");
-        }
-    } else if (args["item"].count() || args["entry"].count()) {
+    if (!args["category"].count() && (args["item"].count() || args["entry"].count())) {
         throw std::out_of_range("Error: missing category argument(s).");
-    } else {
+    } else if (!args["category"].count()) {
         throw std::out_of_range("Error: missing category, item or entry argument(s).");
+    }
+
+    Category &new_cat = wObj.newCategory(args["category"].as<std::string>());
+
+    if (!args["item"].count() && args["entry"].count()) {
+        throw std::out_of_range("Error: missing item argument(s).");
+    } else if (!args["item"].count()) {
+        return;
+    }
+
+    Item &new_item = new_cat.newItem(args["item"].as<std::string>());
+
+    if (!args["entry"].count()) {
+        return;
+    }
+
+    std::string entry_input = args["entry"].as<std::string>();
+    std::string entry_delimiter = ",";
+
+    if (entry_input.find(entry_delimiter) != std::string::npos) {
+        std::string entry_identifier = entry_input.substr(0, entry_input.find(entry_delimiter));
+        std::string entry_value = entry_input.substr(entry_input.find(entry_delimiter) + 1);
+        new_item.addEntry(entry_identifier, entry_value);
+    } else {
+        new_item.addEntry(entry_input, "");
     }
 }
 
@@ -148,7 +155,8 @@ void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
             Category &cur_cat = wObj.getCategory(cur_cat_ident);
             std::string item_input = args["item"].as<std::string>();
             std::string cur_item_ident = item_input.find(key_delimiter) == std::string::npos
-                                         ? item_input : item_input.substr(0, item_input.find(key_delimiter));
+                                         ? item_input : item_input.substr(0,
+                                                                          item_input.find(key_delimiter));
 
             if (args["entry"].count()) {
                 Item &cur_item = cur_cat.getItem(cur_item_ident);
@@ -159,18 +167,23 @@ void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
                 update depending on the delimiter(s) and throws an invalid_argument exception if neither is present. */
                 if (entry_input.find(key_delimiter) != std::string::npos
                     && entry_input.find(value_delimiter) != std::string::npos) {
-                    std::string old_entry_ident = entry_input.substr(0, entry_input.find(key_delimiter));
-                    std::string new_entry_ident = entry_input.substr(entry_input.find(key_delimiter) + 1,
-                                                                     entry_input.find(value_delimiter) -
-                                                                     entry_input.find(key_delimiter) - 1);
-                    std::string new_entry_val = entry_input.substr(entry_input.find(value_delimiter) + 1);
+                    std::string old_entry_ident = entry_input.substr(0, entry_input.find(
+                            key_delimiter));
+                    std::string new_entry_ident = entry_input.substr(
+                            entry_input.find(key_delimiter) + 1,
+                            entry_input.find(value_delimiter) -
+                            entry_input.find(key_delimiter) - 1);
+                    std::string new_entry_val = entry_input.substr(
+                            entry_input.find(value_delimiter) + 1);
 
                     cur_item.addEntry(new_entry_ident, new_entry_val);
                     cur_item.deleteEntry(old_entry_ident);
 
                 } else if (entry_input.find(key_delimiter) != std::string::npos) {
-                    std::string old_entry_ident = entry_input.substr(0, entry_input.find(key_delimiter));
-                    std::string new_entry_ident = entry_input.substr(entry_input.find(key_delimiter) + 1);
+                    std::string old_entry_ident = entry_input.substr(0, entry_input.find(
+                            key_delimiter));
+                    std::string new_entry_ident = entry_input.substr(
+                            entry_input.find(key_delimiter) + 1);
 
                     if (new_entry_ident.empty()) {
                         throw std::invalid_argument("entry");
