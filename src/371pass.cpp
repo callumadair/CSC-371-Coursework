@@ -150,34 +150,39 @@ void App::executeReadAction(const cxxopts::ParseResult &args, Wallet &wObj) {
  * missing a delimiter, a required argument is missing, or the new identifier is missing an exception is thrown, and
  * none of the changes will be applied. */
 void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
-    if (args["category"].count()) {
-        std::string key_delimiter = ":";
-        std::string cat_input = args["category"].as<std::string>();
-        std::string cur_cat_ident = cat_input.find(key_delimiter) == std::string::npos
-                                    ? cat_input : cat_input.substr(0, cat_input.find(key_delimiter));
 
-        if (args["item"].count()) {
-            Category &cur_cat = wObj.getCategory(cur_cat_ident);
-            std::string item_input = args["item"].as<std::string>();
-            std::string cur_item_ident = item_input.find(key_delimiter) == std::string::npos
-                                         ? item_input : item_input.substr(0,
-                                                                          item_input.find(key_delimiter));
-
-            if (args["entry"].count()) {
-                processEntryUpdate(args, key_delimiter, cur_cat, cur_item_ident);
-            }
-            processItemUpdate(key_delimiter, cur_cat, item_input, cur_item_ident);
-
-        } else if (args["entry"].count()) {
-            throw std::out_of_range("Error: missing item argument(s).");
-        }
-        processCategoryUpdate(wObj, key_delimiter, cat_input, cur_cat_ident);
-
-    } else if (args["item"].count() || args["entry"].count()) {
-        throw std::out_of_range("Error: missing category argument(s).");
-    } else {
+    if (!args["category"].count() && args["item"].count() && args["entry"].count()) {
         throw std::out_of_range("Error: missing category, item or entry argument(s).");
     }
+
+    if (!args["category"].count() && (args["item"].count() || args["entry"].count())) {
+        throw std::out_of_range("Error: missing category argument(s).");
+    }
+
+    std::string key_delimiter = ":";
+    std::string cat_input = args["category"].as<std::string>();
+    std::string cur_cat_ident = cat_input.find(key_delimiter) == std::string::npos
+                                ? cat_input : cat_input.substr(0, cat_input.find(key_delimiter));
+
+    if (!args["entry"].count()) {
+        throw std::out_of_range("Error: missing item argument(s).");
+    }
+
+    Category &cur_cat = wObj.getCategory(cur_cat_ident);
+    std::string item_input = args["item"].as<std::string>();
+    std::string cur_item_ident = item_input.find(key_delimiter) == std::string::npos
+                                 ? item_input : item_input.substr(0,
+                                                                  item_input.find(key_delimiter));
+
+    if (args["entry"].count()) {
+        processEntryUpdate(args, key_delimiter, cur_cat, cur_item_ident);
+    }
+    processItemUpdate(key_delimiter, cur_cat, item_input, cur_item_ident);
+
+
+    processCategoryUpdate(wObj, key_delimiter, cat_input, cur_cat_ident);
+
+
 }
 
 void App::processCategoryUpdate(Wallet &wObj, const std::string &key_delimiter, const std::string &cat_input,
