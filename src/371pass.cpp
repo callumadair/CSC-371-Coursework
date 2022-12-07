@@ -151,7 +151,7 @@ void App::executeReadAction(const cxxopts::ParseResult &args, Wallet &wObj) {
  * none of the changes will be applied. */
 void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
 
-    if (!args["category"].count() && args["item"].count() && args["entry"].count()) {
+    if (!args["category"].count() && !args["item"].count() && !args["entry"].count()) {
         throw std::out_of_range("Error: missing category, item or entry argument(s).");
     }
 
