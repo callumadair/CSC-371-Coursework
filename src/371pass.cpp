@@ -179,10 +179,7 @@ void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     }
     processItemUpdate(key_delimiter, cur_cat, item_input, cur_item_ident);
 
-
     processCategoryUpdate(wObj, key_delimiter, cat_input, cur_cat_ident);
-
-
 }
 
 void App::processCategoryUpdate(Wallet &wObj, const std::string &key_delimiter, const std::string &cat_input,
