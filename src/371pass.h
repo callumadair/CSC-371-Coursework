@@ -53,6 +53,8 @@ namespace App {
 
     void executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj);
 
+    void processEntryUpdate();
+
     void executeReadAction(const cxxopts::ParseResult &args, Wallet &wObj);
 
     void executeCreateAction(const cxxopts::ParseResult &args, Wallet &wObj);
@@ -65,6 +67,15 @@ namespace App {
 
     std::string getJSON(Wallet &wObj, const std::string &c, const std::string &i,
                         const std::string &e);
+
+    void processEntryUpdate(const cxxopts::ParseResult &args, const std::string &key_delimiter, Category &cur_cat,
+                            const std::string &cur_item_ident);
+
+    void processItemUpdate(const std::string &key_delimiter, Category &cur_cat, const std::string &item_input,
+                           const std::string &cur_item_ident);
+
+    void processCategoryUpdate(Wallet &wObj, const std::string &key_delimiter, const std::string &cat_input,
+                               const std::string &cur_cat_ident);
 } // namespace App
 
 #endif // _371PASS_H
