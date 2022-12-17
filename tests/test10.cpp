@@ -12,3 +12,10 @@
 #include "../src/lib_cxxopts_argv.hpp"
 
 #include "../src/371pass.h"
+
+
+SCENARIO(
+        "The database and action program arguments can be parsed correctly such that a file can be opened, read and data updated."
+) {
+
+}
