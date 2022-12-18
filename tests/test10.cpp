@@ -17,5 +17,5 @@
 SCENARIO(
         "The database and action program arguments can be parsed correctly such that a file can be opened, read and data updated."
 ) {
-
+const std::string filePath = "./tests/testdatabasesecondalt.json";
 }
