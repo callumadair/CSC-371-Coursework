@@ -17,5 +17,38 @@
 SCENARIO(
         "The database and action program arguments can be parsed correctly such that a file can be opened, read and data updated."
 ) {
-const std::string filePath = "./tests/testdatabasesecondalt.json";
+    const std::string filePath = "./tests/testdatabasesecondalt.json";
+
+
+    auto fileExists = [](const std::string &path) {
+        return std::ifstream(path).is_open();
+    };
+
+    auto writeFileContents = [](const std::string &path,
+                                const std::string &contents) {
+        // Not a robust way to do this, but here it doesn't matter so much, if it
+        // goes wrong we'll fail the test anyway…
+        std::ofstream f{path};
+        f << contents;
+    };
+
+    GIVEN("a valid path to a reset database JSON file") {
+
+        REQUIRE(fileExists(filePath));
+        REQUIRE_NOTHROW(writeFileContents(
+                filePath, "{\"Bank Accounts\":{\"Starling\":{\"Account "
+                          "Number\":\"12345678\",\"Name\":\"Mr John Doe\",\"Sort "
+                          "Code\":\"12-34-56\"}},\"Websites\":{\"Facebook\":{"
+                          "\"password\":\"pass1234fb\",\"url\":\"https://"
+                          "www.facebook.com/"
+                          "\",\"username\":\"example@gmail.com\"},\"Google\":{"
+                          "\"password\":\"pass1234\",\"url\":\"https://www.google.com/"
+                          "\",\"username\":\"example@gmail.com\"},\"Twitter\":{"
+                          "\"password\":\"r43rfsffdsfdsf\",\"url\":\"https://"
+                          "www.twitter.com/\",\"username\":\"example@gmail.com\"}}}"));
+
+        const std::string testCategory = "Bank Accounts";
+        const std::string testItem = "Starling";
+        const std::string testEntryKey = "Account Number";
+    }
 }
