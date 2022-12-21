@@ -47,8 +47,18 @@ SCENARIO(
                           "\"password\":\"r43rfsffdsfdsf\",\"url\":\"https://"
                           "www.twitter.com/\",\"username\":\"example@gmail.com\"}}}"));
 
-        const std::string testCategory = "Bank Accounts";
-        const std::string testItem = "Starling";
-        const std::string testEntryKey = "Account Number";
+        const std::string oldTestCategory = "Bank Accounts";
+        const std::string oldTestItem = "Starling";
+        const std::string oldTestEntryKey = "Account Number";
+
+        const std::string newTestCategory = "Current Accounts";
+        const std::string newTestItem = "Santander";
+        const std::string newTestEntryKey = "Sort Code";
+        const std::string newTestEntryValue = "65-43-21";
+
+        WHEN("the db program argument is '" + filePath +
+             "', the action program argument is 'update'") {
+
+        }
     }
 }
