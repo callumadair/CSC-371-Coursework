@@ -71,6 +71,29 @@ SCENARIO(
 
                 auto **argv = argvObj.argv();
                 auto argc = argvObj.argc();
+
+                THEN("no exception is thrown") {
+
+                    REQUIRE_NOTHROW(App::run(argc, argv));
+
+                        AND_WHEN(
+                                "loading the saved file into a new Wallet object will work") {
+
+                            Wallet wObj1{};
+                            REQUIRE(wObj1.empty());
+                            REQUIRE_NOTHROW(wObj1.load(filePath));
+
+                            THEN("the new Wallet will not contain the entry") {
+
+                                REQUIRE_THROWS_AS(wObj1.getCategory(oldTestCategory)
+                                                          .getItem(oldTestItem)
+                                                          .getEntry(oldTestEntryKey),
+                                                  std::out_of_range);
+
+                            } // THEN
+
+                    }
+                }
             }
         }
     }
