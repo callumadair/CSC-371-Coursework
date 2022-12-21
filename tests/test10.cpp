@@ -64,6 +64,13 @@ SCENARIO(
                      "', and the entry program argument is '" + oldTestEntryKey + ':' + newTestEntryKey + "," +
                      newTestEntryValue + "'") {
 
+                Argv argvObj({"test", "--db", filePath.c_str(), "--action", "update",
+                              "--category", (oldTestCategory + ":" + newTestCategory).c_str(),
+                              "--item", (oldTestItem + ":" + newTestItem).c_str(),
+                              "--entry", (oldTestEntryKey + ":" + newTestEntryKey + "," + newTestEntryValue).c_str()});
+
+                auto **argv = argvObj.argv();
+                auto argc = argvObj.argc();
             }
         }
     }
