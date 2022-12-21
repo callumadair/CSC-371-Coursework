@@ -59,6 +59,12 @@ SCENARIO(
         WHEN("the db program argument is '" + filePath +
              "', the action program argument is 'update'") {
 
+            AND_WHEN("and the category program argument is '" + oldTestCategory + ':' + newTestCategory +
+                     "', the item program argument is '" + oldTestItem + ':' + newTestItem +
+                     "', and the entry program argument is '" + oldTestEntryKey + ':' + newTestEntryKey + "," +
+                     newTestEntryValue + "'") {
+
+            }
         }
     }
 }
