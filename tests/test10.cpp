@@ -76,22 +76,27 @@ SCENARIO(
 
                     REQUIRE_NOTHROW(App::run(argc, argv));
 
-                        AND_WHEN(
-                                "loading the saved file into a new Wallet object will work") {
+                    AND_WHEN(
+                            "loading the saved file into a new Wallet object will work") {
 
-                            Wallet wObj1{};
-                            REQUIRE(wObj1.empty());
-                            REQUIRE_NOTHROW(wObj1.load(filePath));
+                        Wallet wObj1{};
+                        REQUIRE(wObj1.empty());
+                        REQUIRE_NOTHROW(wObj1.load(filePath));
 
-                            THEN("the new Wallet will not contain the entry") {
+                        THEN("the new Wallet will not contain the old entry") {
 
-                                REQUIRE_THROWS_AS(wObj1.getCategory(oldTestCategory)
-                                                          .getItem(oldTestItem)
-                                                          .getEntry(oldTestEntryKey),
-                                                  std::out_of_range);
+                            REQUIRE_THROWS_AS(wObj1.getCategory(oldTestCategory)
+                                                      .getItem(oldTestItem)
+                                                      .getEntry(oldTestEntryKey),
+                                              std::out_of_range);
 
-                            } // THEN
+                        } // THEN
 
+                        THEN("the new wallet will contain the new entry") {
+                            REQUIRE_NOTHROW(wObj1.getCategory(newTestCategory)
+                                                    .getItem(newTestItem)
+                                                    .getEntry(newTestEntryKey) == newTestEntryValue);
+                        }
                     }
                 }
             }
