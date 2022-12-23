@@ -26,4 +26,4 @@ add_executable(CSC_371_Coursework_Testall
         tests/test1.cpp tests/test2.cpp tests/test3.cpp
         tests/test4.cpp tests/test5.cpp tests/test6.cpp
         tests/test7.cpp tests/test8.cpp tests/test9.cpp
-        tests/test10.cpp)
+        tests/test10.cpp tests/test11.cpp)
