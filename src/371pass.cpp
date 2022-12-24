@@ -149,6 +149,7 @@ void App::executeReadAction(const cxxopts::ParseResult &args, Wallet &wObj) {
 /* Updates the specified container(s) and/or entry, if given the correct arguments at all levels, if an argument is
  * missing a delimiter, a required argument is missing, or the new identifier is missing an exception is thrown, and
  * none of the changes will be applied. */
+/* If an update action is performed in which an idenitifier is changed to a value which is already present, the program will pseudo-randomly grab either object depending on the hash at compile*/
 void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
 
     if (!args["category"].count() && !args["item"].count() && !args["entry"].count()) {
