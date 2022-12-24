@@ -50,6 +50,7 @@ SCENARIO(
         const std::string oldTestCategory = "Bank Accounts";
         const std::string oldTestItem = "Starling";
         const std::string oldTestEntryKey = "Account Number";
+        const std::string oldTestEntryValue = "12345678";
 
         const std::string newTestCategory = "Current Accounts";
         const std::string newTestItem = "Santander";
@@ -58,6 +59,22 @@ SCENARIO(
 
         WHEN("the db program argument is '" + filePath +
              "', the action program argument is 'update'") {
+
+            Wallet wObj1{};
+            wObj1.load(filePath);
+
+            REQUIRE_NOTHROW(wObj1.getCategory(oldTestCategory)
+                                    .getItem(oldTestItem)
+                                    .getEntry(oldTestEntryKey));
+
+            REQUIRE(wObj1.getCategory(oldTestCategory)
+                            .getItem(oldTestItem)
+                            .getEntry(oldTestEntryKey) == oldTestEntryValue);
+
+            REQUIRE_THROWS_AS(wObj1.getCategory(newTestCategory)
+                                      .getItem(newTestItem)
+                                      .getEntry(newTestEntryKey),
+                              std::out_of_range);
 
             AND_WHEN("and the category program argument is '" + oldTestCategory + ':' + newTestCategory +
                      "', the item program argument is '" + oldTestItem + ':' + newTestItem +
@@ -78,13 +95,13 @@ SCENARIO(
 
                     AND_WHEN("loading the saved file into a new Wallet object will work") {
 
-                        Wallet wObj1{};
-                        REQUIRE(wObj1.empty());
-                        REQUIRE_NOTHROW(wObj1.load(filePath));
+                        Wallet wObj2{};
+                        REQUIRE(wObj2.empty());
+                        REQUIRE_NOTHROW(wObj2.load(filePath));
 
                         THEN("the new Wallet will not contain the old entry") {
 
-                            REQUIRE_THROWS_AS(wObj1.getCategory(oldTestCategory)
+                            REQUIRE_THROWS_AS(wObj2.getCategory(oldTestCategory)
                                                       .getItem(oldTestItem)
                                                       .getEntry(oldTestEntryKey),
                                               std::out_of_range);
@@ -92,9 +109,13 @@ SCENARIO(
                         } // THEN
 
                         THEN("the new wallet will contain the new entry") {
-                            REQUIRE_NOTHROW(wObj1.getCategory(newTestCategory)
+                            REQUIRE_NOTHROW(wObj2.getCategory(newTestCategory)
                                                     .getItem(newTestItem)
-                                                    .getEntry(newTestEntryKey) == newTestEntryValue);
+                                                    .getEntry(newTestEntryKey));
+
+                            REQUIRE(wObj2.getCategory(newTestCategory)
+                                            .getItem(newTestItem)
+                                            .getEntry(newTestEntryKey) == newTestEntryValue);
                         }
                     }
                 }
