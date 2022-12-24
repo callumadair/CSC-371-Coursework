@@ -76,8 +76,7 @@ SCENARIO(
 
                     REQUIRE_NOTHROW(App::run(argc, argv));
 
-                    AND_WHEN(
-                            "loading the saved file into a new Wallet object will work") {
+                    AND_WHEN("loading the saved file into a new Wallet object will work") {
 
                         Wallet wObj1{};
                         REQUIRE(wObj1.empty());
