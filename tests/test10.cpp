@@ -54,8 +54,8 @@ SCENARIO(
 
         const std::string newTestCategory = "Current Accounts";
         const std::string newTestItem = "Santander";
-        const std::string newTestEntryKey = "Sort Code";
-        const std::string newTestEntryValue = "65-43-21";
+        const std::string newTestEntryKey = "Account";
+        const std::string newTestEntryValue = "87654321";
 
         WHEN("the db program argument is '" + filePath +
              "', the action program argument is 'update'") {
