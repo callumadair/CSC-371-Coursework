@@ -15,7 +15,7 @@
 
 
 SCENARIO(
-        "The database and action program arguments can be parsed correctly such that a file can be opened, read and data updated.") {
+        "The database and action program arguments can be parsed correctly such that a file can be opened, data added and correct json parsing behaviours confirmed.") {
 
     const std::string filePath = "./tests/testdatabasethirdalt.json";
 
@@ -23,11 +23,23 @@ SCENARIO(
         return std::ifstream(path).is_open();
     };
 
-    auto writeFileContents = [](const std::string &path,
-                                const std::string &contents) {
-        // Not a robust way to do this, but here it doesn't matter so much, if it
-        // goes wrong we'll fail the test anyway…
-        std::ofstream f{path};
-        f << contents;
-    };
+    GIVEN("a valid path to a reset JSON database file") {
+
+        REQUIRE(fileExists(filePath));
+
+        const std::string testCatIdent = "Bank Accounts";
+        const std::string testItemIdent = "Nationwide";
+        const std::string testEntryKey = "Sort Code";
+        const std::string testEntryValue = "12-34-56";
+
+        Wallet wObj{};
+        wObj.newCategory(testCatIdent);
+        wObj.save(filePath);
+
+        Wallet wObj2{};
+        wObj2.load(filePath);
+        Category &testCat = wObj2.getCategory(testCatIdent);
+
+        REQUIRE(testCat.str() == "null");
+    }
 }
