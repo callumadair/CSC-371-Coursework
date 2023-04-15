@@ -1,11 +1,6 @@
-# 371pass
+# This is my implementation of 371pass coursework for the advanced object oriented programming module (CSC371) at Swansea University. The program functions entirely on the command line and makes use of the catch2 unit testing framework for behaviour validation, the majority of tests were written by Martin Porcheon, with additional unit testing added by myself. Additionally member function signatures were provided but very little implementation was initially present.
 
-___
-You should use this README to document things you did that you think are clever and could get you marks, or things you
-couldn't get working and perhaps why. It is fully expected that a lot of students will not complete this coursework—it
-is designed to be challenging. The mark scheme is also designed to be fair—marks are awarded for everything you
-complete, with some given for the quality of the code you write.
-___
+
 All required functionality specified in the specification is present and working fully as far as my own and the
 automated tests can show, including functionality mentioned in the coursework discussion question board such as
 favouring the entries held in a new container over the existing container and being able to update multiple containers
@@ -20,5 +15,3 @@ addItem and addCategory functions.
 
 All variable names are written in snake_case and all member functions names are written in camelCase to ensure
 consistency with the provided framework.
-
-Thanks for a challenging but well explained coursework.
