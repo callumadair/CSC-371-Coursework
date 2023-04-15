@@ -1,4 +1,5 @@
-# This is my implementation of 371pass coursework for the advanced object oriented programming module (CSC371) at Swansea University. The program functions entirely on the command line and makes use of the catch2 unit testing framework for behaviour validation, the majority of tests were written by Martin Porcheon, with additional unit testing added by myself. Additionally member function signatures were provided but very little implementation was initially present.
+# This is my implementation of 371pass coursework for the advanced object oriented programming module (CSC371) at Swansea University. 
+The program functions entirely on the command line and makes use of the catch2 unit testing framework for behaviour validation, the majority of tests were written by Martin Porcheon, with additional unit testing added by myself. Additionally member function signatures were provided but very little implementation was initially present.
 
 
 All required functionality specified in the specification is present and working fully as far as my own and the
