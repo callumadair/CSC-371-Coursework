@@ -2,7 +2,7 @@
 // CSC371 Advanced Object Oriented Programming (2021/22)
 // Department of Computer Science, Swansea University
 //
-// Author: 851784
+// Author: Callum Adair
 //
 // Canvas: https://canvas.swansea.ac.uk/courses/24793
 // -----------------------------------------------------
