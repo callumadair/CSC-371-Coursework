@@ -31,7 +31,6 @@ int App::run(int argc, char *argv[]) {
 
     // Print the help usage if requested
     if (args.count("help")) {
-        std::cout << options.help() << '\n';
         return 0;
     }
 
@@ -165,7 +164,7 @@ void App::executeUpdateAction(const cxxopts::ParseResult &args, Wallet &wObj) {
     std::string cur_cat_ident = cat_input.find(key_delimiter) == std::string::npos
                                 ? cat_input : cat_input.substr(0, cat_input.find(key_delimiter));
 
-    if (!args["entry"].count()) {
+    if (!args["item"].count() && args["entry"].count()) {
         throw std::out_of_range("Error: missing item argument(s).");
     }
 
